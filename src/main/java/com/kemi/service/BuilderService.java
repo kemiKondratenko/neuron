@@ -1,18 +1,16 @@
 package com.kemi.service;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.kemi.service.factory.Factory;
 import com.kemi.service.text.load.Loader;
-import com.kemi.system.Word;
 import com.kemi.system.Sentence;
+import com.kemi.system.Word;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.BreakIterator;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Eugene on 16.03.2016.
@@ -25,14 +23,12 @@ public class BuilderService {
     @Autowired
     private Factory factory;
 
-    public String get() {
+    public Collection<Sentence> get() {
         build(loader.loadText("/texts/n.txt"));
-        return factory.getSentences().toString();
+        return factory.getSentences();
     }
 
     private Collection<Sentence> build(String text) {
-        Set<Word> res = Sets.newHashSet();
-        Collection<Sentence> sentences = getSentences(text);
         return getSentences(text);
     }
 
@@ -48,7 +44,7 @@ public class BuilderService {
     private List<Word> getWords(String sentence) {
         List<Word> words = Lists.newArrayList();
         for (String word : getWordsAsString(sentence)) {
-            factory.neuron(word);
+            words.add(factory.neuron(word));
         }
         return words;
     }
