@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kemi.service.factory.Factory;
 import com.kemi.service.text.load.Loader;
-import com.kemi.system.Neuron;
+import com.kemi.system.Word;
 import com.kemi.system.Sentence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,28 +26,35 @@ public class BuilderService {
     private Factory factory;
 
     public String get() {
-        String text = loader.loadText("/texts/n.txt");
-        Collection<Neuron> res = build(text);
-        return res.toString();
+        build(loader.loadText("/texts/n.txt"));
+        return factory.getSentences().toString();
     }
 
     private Collection<Sentence> build(String text) {
-        Set<Neuron> res = Sets.newHashSet();
+        Set<Word> res = Sets.newHashSet();
         Collection<Sentence> sentences = getSentences(text);
-        Collection<String> words = getWords(sentences.get(0));
-        for (String word : words) {
-            res.add(factory.neuron(word));
-        }
         return getSentences(text);
     }
 
-    private Collection<String> getWords(String source) {
-        return get(source, BreakIterator.getWordInstance());
+    private Collection<Sentence> getSentences(String source) {
+        List<Sentence> sentencesRes = Lists.newArrayList();
+        Collection<String> sentences = getSentencesAsString(source);
+        for (String sentence : sentences) {
+            sentencesRes.add(factory.sentence(sentence, getWords(sentence)));
+        }
+        return sentencesRes;
     }
 
-    private Collection<Sentence> getSentences(String source) {
-        Collection<Sentence> sentences = getSentences(text);
-        return factory.sentences(get(source, BreakIterator.getSentenceInstance()));
+    private List<Word> getWords(String sentence) {
+        List<Word> words = Lists.newArrayList();
+        for (String word : getWordsAsString(sentence)) {
+            factory.neuron(word);
+        }
+        return words;
+    }
+
+    private Collection<String> getWordsAsString(String source) {
+        return get(source, BreakIterator.getWordInstance());
     }
 
     private Collection<String> getSentencesAsString(String source) {

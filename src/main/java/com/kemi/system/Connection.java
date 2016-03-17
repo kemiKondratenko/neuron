@@ -5,20 +5,20 @@ package com.kemi.system;
  */
 public class Connection {
 
-    private Neuron neuron;
+    private Word word;
     private Integer weight;
 
-    public Connection(Neuron neuron, Integer weight) {
-        this.neuron = neuron;
+    public Connection(Word word, Integer weight) {
+        this.word = word;
         this.weight = weight;
     }
 
-    public Neuron getNeuron() {
-        return neuron;
+    public Word getWord() {
+        return word;
     }
 
-    public void setNeuron(Neuron neuron) {
-        this.neuron = neuron;
+    public void setWord(Word word) {
+        this.word = word;
     }
 
     public Integer getWeight() {
@@ -32,7 +32,7 @@ public class Connection {
     @Override
     public String toString() {
         return "Connection{" +
-                "neuron=" + neuron +
+                "neuron=" + word +
                 ", weight=" + weight +
                 '}';
     }
@@ -44,14 +44,14 @@ public class Connection {
 
         Connection that = (Connection) o;
 
-        if (neuron != null ? !neuron.equals(that.neuron) : that.neuron != null) return false;
+        if (word != null ? !word.equals(that.word) : that.word != null) return false;
         return weight != null ? weight.equals(that.weight) : that.weight == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = neuron != null ? neuron.hashCode() : 0;
+        int result = word != null ? word.hashCode() : 0;
         result = 31 * result + (weight != null ? weight.hashCode() : 0);
         return result;
     }

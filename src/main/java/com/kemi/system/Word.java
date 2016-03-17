@@ -7,32 +7,32 @@ import java.util.List;
 /**
  * Created by Eugene on 16.03.2016.
  */
-public class Neuron {
+public class Word {
 
-    private List<Connection> neurons;
+    private List<Connection> words;
     private String word;
     private int count;
 
-    public Neuron(String word) {
+    public Word(String word) {
         this.word = word;
-        neurons = Lists.newArrayList();
+        words = Lists.newArrayList();
         count = 0;
     }
 
-    public List<Connection> getNeurons() {
-        return neurons;
+    public List<Connection> getWords() {
+        return words;
     }
 
-    public void setNeurons(List<Connection> neurons) {
-        this.neurons = neurons;
+    public void setWords(List<Connection> words) {
+        this.words = words;
     }
 
-    public void addNeurons(List<Connection> neurons) {
-        this.neurons.addAll(neurons);
+    public void addWords(List<Connection> neurons) {
+        this.words.addAll(neurons);
     }
 
-    public void addNeurons(Connection neuron) {
-        this.neurons.add(neuron);
+    public void addWord(Connection neuron) {
+        this.words.add(neuron);
     }
 
     public String getWord() {
@@ -46,18 +46,18 @@ public class Neuron {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Neuron)) return false;
+        if (!(o instanceof Word)) return false;
 
-        Neuron neuron = (Neuron) o;
+        Word word = (Word) o;
 
-        if (neurons != null ? !neurons.equals(neuron.neurons) : neuron.neurons != null) return false;
-        return word != null ? word.equals(neuron.word) : neuron.word == null;
+        if (words != null ? !words.equals(word.words) : word.words != null) return false;
+        return this.word != null ? this.word.equals(word.word) : word.word == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = neurons != null ? neurons.hashCode() : 0;
+        int result = words != null ? words.hashCode() : 0;
         result = 31 * result + (word != null ? word.hashCode() : 0);
         return result;
     }
@@ -65,7 +65,7 @@ public class Neuron {
     @Override
     public String toString() {
         return "Neuron{" +
-                "neurons=" + neurons +
+                "words=" + words +
                 ", word='" + word + '\'' +
                 ", count='" + count + '\'' +
                 '}';
