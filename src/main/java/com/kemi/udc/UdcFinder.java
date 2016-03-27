@@ -10,6 +10,7 @@ import com.kemi.entities.UdcEntity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +33,7 @@ public class UdcFinder {
     private LinkToUdcDao linkToUdcDao;
 
     public String index() {
-        List<PdfLink> links = entitiesDao.get(PdfLink.class);
+        List<PdfLink> links = entitiesDao.get(PdfLink.class, Restrictions.isEmpty("linkToUdcs"));
         loadAndFindUdc(links);
         return null;
     }
@@ -90,10 +91,10 @@ public class UdcFinder {
     private String findUdcText(String text) {
         String res = null;
         int udc = text.indexOf("УДК");
-        if (!(udc > 0)) {
+        if (!(udc >= 0)) {
             udc = text.indexOf("удк");
         }
-        if (udc > 0) {
+        if (udc >= 0) {
             res = text.substring(udc + 4, text.indexOf("\r\n", udc)).replace(" ", "");
         }
         return res;
@@ -109,7 +110,7 @@ public class UdcFinder {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
-        }
+    }
         return text;
     }
 }
