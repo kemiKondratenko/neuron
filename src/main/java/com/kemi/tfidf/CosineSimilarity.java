@@ -3,10 +3,14 @@ package com.kemi.tfidf;
 /**
  * Created by Eugene on 23.03.2016.
  */
+
+import org.springframework.stereotype.Service;
+
 /**
  * Cosine similarity calculator class
  * @author Mubin Shrestha
  */
+@Service
 public class CosineSimilarity {
 
     /**
@@ -19,7 +23,7 @@ public class CosineSimilarity {
         double dotProduct = 0.0;
         double magnitude1 = 0.0;
         double magnitude2 = 0.0;
-        double cosineSimilarity = 0.0;
+        double cosineSimilarity;
 
         for (int i = 0; i < docVector1.length; i++) //docVector1 and docVector2 must be of same length
         {

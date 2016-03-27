@@ -1,5 +1,6 @@
 package com.kemi.tfidf;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -11,6 +12,12 @@ import java.util.List;
  */
 @Service
 public class DocumentParser {
+
+    @Autowired
+    private TfIdf tfIdf;
+    @Autowired
+    private CosineSimilarity cosineSimilarity;
+
 
     //This variable will hold all terms of each document in an array.
     private List<String[]> termsDocsArray = new ArrayList<>();
@@ -57,8 +64,8 @@ public class DocumentParser {
             Double[] tfidfvectors = new Double[allTerms.size()];
             int count = 0;
             for (String terms : allTerms) {
-                tf = new TfIdf().tfCalculator(docTermsArray, terms);
-                idf = new TfIdf().idfCalculator(termsDocsArray, terms);
+                tf = tfIdf.tfCalculator(docTermsArray, terms);
+                idf = tfIdf.idfCalculator(termsDocsArray, terms);
                 tfidf = tf * idf;
                 tfidfvectors[count] = tfidf;
                 count++;
@@ -73,13 +80,11 @@ public class DocumentParser {
     public void getCosineSimilarity() {
         for (int i = 0; i < tfidfDocsVector.size(); i++) {
             for (int j = 0; j < tfidfDocsVector.size(); j++) {
-                System.out.println("between " + i + " and " + j + "  =  "
-                        + new CosineSimilarity().cosineSimilarity
+                cosineSimilarity.cosineSimilarity
                         (
                                 tfidfDocsVector.get(i),
                                 tfidfDocsVector.get(j)
-                        )
-                );
+                        );
             }
         }
     }

@@ -1,10 +1,13 @@
 package com.kemi.tfidf;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 /**
  * Created by Eugene on 23.03.2016.
  */
+@Service
 public class TfIdf {
 
     /**
