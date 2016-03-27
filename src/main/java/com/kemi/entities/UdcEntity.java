@@ -1,5 +1,7 @@
 package com.kemi.entities;
 
+import com.google.common.collect.Sets;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -26,6 +28,15 @@ public class UdcEntity {
 
     public UdcEntity(String udc) {
         this.udc = udc;
+    }
+
+    public UdcEntity(UdcEntity udcEntity) {
+        this.id = udcEntity.id;
+        this.udc = udcEntity.udc;
+        this.linkToUdcs = Sets.newHashSet();
+        for (LinkToUdc linkToUdc : udcEntity.getLinkToUdcs()) {
+            this.linkToUdcs.add(new LinkToUdc(linkToUdc));
+        }
     }
 
     public int getId() {

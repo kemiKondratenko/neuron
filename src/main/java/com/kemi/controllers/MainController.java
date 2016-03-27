@@ -1,6 +1,6 @@
 package com.kemi.controllers;
 
-import com.kemi.entities.PdfLink;
+import com.kemi.entities.UdcEntity;
 import com.kemi.service.BuilderService;
 import com.kemi.tfidf.DocumentParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class MainController {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "find", produces = "application/json;charset=utf-8")
-    public @ResponseBody Collection<PdfLink> find(){
+    public @ResponseBody Collection<UdcEntity> find(){
         return builderService.find();
     }
 
@@ -44,6 +44,13 @@ public class MainController {
     @RequestMapping(value = "count", produces = "application/json;charset=utf-8")
     public @ResponseBody Number count(){
         return builderService.count();
+    }
+
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "udcCount", produces = "application/json;charset=utf-8")
+    public @ResponseBody Number udcCount(){
+        return builderService.udcCount();
     }
 
 

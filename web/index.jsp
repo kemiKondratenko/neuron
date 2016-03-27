@@ -44,7 +44,7 @@
 
             window.setInterval(function(){
                 find();
-            }, 5000);
+            }, 15000);
         });
         start = function () {
             $.get("/new")
@@ -72,6 +72,14 @@
                     })
                     .fail(function (data) {
                         console.log("found "+data);
+                    });
+            $.get("/udcCount")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#udcCount").html("found udc "+data);
+                    })
+                    .fail(function (data) {
+                        console.log("found udc "+data);
                     });
         };
         findUdc = function () {
@@ -112,6 +120,7 @@
 <p><input type ="button" id = "findUdc" value="Find UDC"/></p>
 <pre><code>
     <div id="count"></div>
+    <div id="udcCount"></div>
     <div id="one"></div>
 </code></pre>
 </body>

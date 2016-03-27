@@ -1,9 +1,9 @@
 package com.kemi.service;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
 import com.kemi.entities.PdfLink;
+import com.kemi.entities.UdcEntity;
 import com.kemi.service.factory.Factory;
 import com.kemi.service.text.load.Loader;
 import com.kemi.storage.crawler.WebCrawler;
@@ -87,13 +87,12 @@ public class BuilderService {
     }
 
     @Transactional
-    public Collection<PdfLink> find() {
-        return Lists.transform(entitiesDao.get(PdfLink.class), new Function<PdfLink, PdfLink>() {
-            @Override
-            public PdfLink apply(PdfLink from) {
-                return new PdfLink(from.getId(), from.getPdfLink());
-            }
-        });
+    public Collection<UdcEntity> find() {
+        List<UdcEntity> udcEntities = Lists.newArrayList();
+        for (UdcEntity udcEntity : entitiesDao.get(UdcEntity.class)) {
+            udcEntities.add(new UdcEntity(udcEntity));
+        }
+        return udcEntities;
     }
 
     @Transactional
@@ -104,5 +103,10 @@ public class BuilderService {
     @Transactional
     public String findUdc() {
         return udcFinder.index();
+    }
+
+    @Transactional
+    public Number udcCount() {
+        return entitiesDao.count(UdcEntity.class);
     }
 }

@@ -33,6 +33,11 @@ public class PdfLink {
         this.pdfLink = pdfLink;
     }
 
+    public PdfLink(PdfLink pdfLink) {
+        this.id = pdfLink.id;
+        this.pdfLink = pdfLink.pdfLink;
+    }
+
     public int getId() {
         return id;
     }

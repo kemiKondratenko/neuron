@@ -29,6 +29,12 @@ public class LinkToUdc {
         this.udcEntity = udcEntity;
     }
 
+    public LinkToUdc(LinkToUdc linkToUdc) {
+        this.pdfLink = new PdfLink(linkToUdc.pdfLink);
+        this.id = linkToUdc.id;
+        this.udcEntity = null;
+    }
+
     public int getId() {
         return id;
     }
