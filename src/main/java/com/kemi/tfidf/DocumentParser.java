@@ -1,10 +1,17 @@
 package com.kemi.tfidf;
 
+import com.google.common.collect.Lists;
+import com.kemi.database.EntitiesDao;
+import com.kemi.database.WordDao;
+import com.kemi.entities.PdfLink;
+import com.kemi.service.text.load.Loader;
+import com.kemi.system.Word;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.text.BreakIterator;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -14,78 +21,43 @@ import java.util.List;
 public class DocumentParser {
 
     @Autowired
-    private TfIdf tfIdf;
+    private EntitiesDao entitiesDao;
     @Autowired
-    private CosineSimilarity cosineSimilarity;
+    private Loader loader;
+    @Autowired
+    private WordDao wordDao;
 
-
-    //This variable will hold all terms of each document in an array.
-    private List<String[]> termsDocsArray = new ArrayList<>();
-    private List<String> allTerms = new ArrayList<>(); //to hold all terms
-    private List<Double[]> tfidfDocsVector = new ArrayList<>();
-
-    /**
-     * Method to read files and store in array.
-     * @param filePath : source file path
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public void parseFiles(String filePath) throws FileNotFoundException, IOException {
-        File[] allfiles = new File(filePath).listFiles();
-        BufferedReader in = null;
-        for (File f : allfiles) {
-            if (f.getName().endsWith(".txt")) {
-                in = new BufferedReader(new FileReader(f));
-                StringBuilder sb = new StringBuilder();
-                String s = null;
-                while ((s = in.readLine()) != null) {
-                    sb.append(s);
-                }
-                String[] tokenizedTerms = sb.toString().replaceAll("[\\W&&[^\\s]]", "").split("\\W+");   //to get individual terms
-                for (String term : tokenizedTerms) {
-                    if (!allTerms.contains(term)) {  //avoid duplicate entry
-                        allTerms.add(term);
-                    }
-                }
-                termsDocsArray.add(tokenizedTerms);
-            }
-        }
-
+    public void parseFiles() {
+        List<PdfLink> links = entitiesDao.get(PdfLink.class, Restrictions.isEmpty("linkToUdcs"));
+        buildWordEntities(links);
     }
 
-    /**
-     * Method to create termVector according to its tfidf score.
-     */
-    public void tfIdfCalculator() {
-        double tf; //term frequency
-        double idf; //inverse document frequency
-        double tfidf; //term requency inverse document frequency
-        for (String[] docTermsArray : termsDocsArray) {
-            Double[] tfidfvectors = new Double[allTerms.size()];
-            int count = 0;
-            for (String terms : allTerms) {
-                tf = tfIdf.tfCalculator(docTermsArray, terms);
-                idf = tfIdf.idfCalculator(termsDocsArray, terms);
-                tfidf = tf * idf;
-                tfidfvectors[count] = tfidf;
-                count++;
-            }
-            tfidfDocsVector.add(tfidfvectors);  //storing document vectors;
+    private void buildWordEntities(List<PdfLink> links) {
+        for (PdfLink link : links) {
+            String text = loader.loadText(link.getPdfLink());
+            parseAndBuildWords(link, text);
         }
     }
 
-    /**
-     * Method to calculate cosine similarity between all the documents.
-     */
-    public void getCosineSimilarity() {
-        for (int i = 0; i < tfidfDocsVector.size(); i++) {
-            for (int j = 0; j < tfidfDocsVector.size(); j++) {
-                cosineSimilarity.cosineSimilarity
-                        (
-                                tfidfDocsVector.get(i),
-                                tfidfDocsVector.get(j)
-                        );
-            }
+    private void parseAndBuildWords(PdfLink link, String text) {
+        for (String s : text.split("\\w+")) {
+            Word word = wordDao.create(s);
         }
+    }
+
+    private Collection<String> getWordsAsString(String source) {
+        return get(source, BreakIterator.getWordInstance());
+    }
+
+    private List<String> get(String source, BreakIterator iterator) {
+        List<String> res = Lists.newArrayList();
+        iterator.setText(source);
+        int start = iterator.first();
+        for (int end = iterator.next();
+             end != BreakIterator.DONE;
+             start = end, end = iterator.next()) {
+            res.add(source.substring(start,end));
+        }
+        return res;
     }
 }

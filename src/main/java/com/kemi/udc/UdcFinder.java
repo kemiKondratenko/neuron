@@ -7,16 +7,13 @@ import com.kemi.database.UdcDao;
 import com.kemi.entities.LinkToUdc;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.UdcEntity;
+import com.kemi.service.text.load.Loader;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.util.PDFTextStripper;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -31,6 +28,8 @@ public class UdcFinder {
     private UdcDao udcDao;
     @Autowired
     private LinkToUdcDao linkToUdcDao;
+    @Autowired
+    private Loader loader;
 
     public String index() {
         List<PdfLink> links = entitiesDao.get(PdfLink.class, Restrictions.isEmpty("linkToUdcs"));
@@ -48,7 +47,7 @@ public class UdcFinder {
         List<LinkToUdc> linkToUdcs = linkToUdcDao.find(link);
         linkToUdcs.remove(null);
         if (CollectionUtils.isEmpty(linkToUdcs)) {
-            String text = extractText(link.getPdfLink());
+            String text = loader.loadText(link.getPdfLink());
             if (text != null) {
                 String udcText = findUdcText(text);
                 if (udcText != null) {
@@ -98,19 +97,5 @@ public class UdcFinder {
             res = text.substring(udc + 4, text.indexOf("\r\n", udc)).replace(" ", "");
         }
         return res;
-    }
-
-    private String extractText(String file) {
-        String text = null;
-        try {
-            PDDocument doc = PDDocument.load(new URL(file));
-            PDFTextStripper stripper = new PDFTextStripper();
-            text = stripper.getText(doc);
-            doc.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-    }
-        return text;
     }
 }

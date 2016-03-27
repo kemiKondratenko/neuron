@@ -1,5 +1,6 @@
 package com.kemi.tfidf;
 
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +44,32 @@ public class TfIdf {
             }
         }
         return 1 + Math.log(allTerms.size() / count);
+    }
+
+
+
+    /**
+     * Method to create termVector according to its tfidf score.
+     * @param termsDocsArray
+     * @param allTerms
+     */
+    public List<Double[]> tfIdfCalculator(List<String[]> termsDocsArray, String[] allTerms) {
+        double tf; //term frequency
+        double idf; //inverse document frequency
+        double tfidf; //term requency inverse document frequency
+        List<Double[]> tfidfDocsVector = Lists.newArrayList();
+        for (String[] docTermsArray : termsDocsArray) {
+            Double[] tfidfvectors = new Double[allTerms.length];
+            int count = 0;
+            for (String terms : allTerms) {
+                tf = tfCalculator(docTermsArray, terms);
+                idf = idfCalculator(termsDocsArray, terms);
+                tfidf = tf * idf;
+                tfidfvectors[count] = tfidf;
+                count++;
+            }
+            tfidfDocsVector.add(tfidfvectors);  //storing document vectors;
+        }
+        return tfidfDocsVector;
     }
 }
