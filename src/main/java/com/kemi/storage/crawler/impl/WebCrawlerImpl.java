@@ -65,33 +65,55 @@ public class WebCrawlerImpl implements WebCrawler {
             getLinksOnPage(link);
     }
 
-    private String format(String url) {
-        if (!url.startsWith("http"))
-            url = "http://nz.ukma.edu.ua" + url;
-        return url;
-    }
-
     private boolean parsePage(String url, List<String> references) {
         Document doc;
         try {
             doc = Jsoup.connect(url).timeout(timeout).get();
             for (Element link : doc.select("a[href]")) {
                 String href = link.attr("href");
-                href = format(href);
+                if (visitedLinks.contains(url))
+                    continue;
+                href = format(href, url);
+                if (visitedLinks.contains(url))
+                    continue;
                 if (!isAllowed(href))
                     continue;
-                references.add(href);
-                if (href.endsWith("pdf")) {
+                if (href.contains(".pdf")) {
+                    href = href.substring(0, href.lastIndexOf(".pdf")+4);
                     System.out.println("New pdf is "+href);
                     pdfLinks.add(href);
+                    visitedLinks.add(href);
                     linksDao.create(href);
-                }
+                } else
+                if (href.contains(".PDF")) {
+                    href = href.substring(0, href.lastIndexOf(".PDF")+4);
+                    System.out.println("New pdf is "+href);
+                    pdfLinks.add(href);
+                    visitedLinks.add(href);
+                    linksDao.create(href);
+                } else
+                    references.add(href);
             }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return true;
+    }
+
+    private String format(String href, String url) {
+        int dot = url.lastIndexOf('.');
+        int slh = url.indexOf( '/', dot);
+        String place = url.substring(0, slh > 0 ? slh : url.length());
+        if (!url.startsWith("http"))
+            href = place + href;
+        return href;
+    }
+
+    private String format(String url) {
+        if (!url.startsWith("http"))
+            url = "http://nz.ukma.edu.ua" + url;
+        return url;
     }
 
     @Override

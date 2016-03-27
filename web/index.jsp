@@ -39,7 +39,8 @@
     <script src="/resources/jquery/jquery-2.1.3.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#sb").click(function(e){start();});
+            $("#sb").click(function(){start();});
+            $("#findUdc").click(function(){findUdc();});
 
             window.setInterval(function(){
                 find();
@@ -60,6 +61,24 @@
                     .done(function (data) {
                         console.log(data);
                         $("#one").html(syntaxHighlight(data));
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                    });
+            $.get("/count")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#count").html("found "+data);
+                    })
+                    .fail(function (data) {
+                        console.log("found "+data);
+                    });
+        };
+        findUdc = function () {
+            $.get("/findUdc")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#findUdc").html(syntaxHighlight(data));
                     })
                     .fail(function (data) {
                         console.log(data)
@@ -90,7 +109,9 @@
 </head>
 <body>
 <p><input type ="button" id = "sb" value="Search Again"/></p>
+<p><input type ="button" id = "findUdc" value="Find UDC"/></p>
 <pre><code>
+    <div id="count"></div>
     <div id="one"></div>
 </code></pre>
 </body>

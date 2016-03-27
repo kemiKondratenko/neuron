@@ -4,6 +4,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,13 @@ public class EntitiesDao {
         for (Criterion restriction : restrictions)
             criteria.add(restriction);
         return criteria.list();
+    }
+
+
+    public <T> Number count(Class<T> currentClass) {
+        Criteria criteria = getSession().createCriteria(currentClass);
+        criteria.setProjection(Projections.rowCount());
+        return ((Number)criteria.uniqueResult());
     }
 
     private Session getSession(){

@@ -43,15 +43,22 @@ public class MainController {
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "find", produces = "application/json;charset=utf-8")
     public @ResponseBody Collection<PdfLink> find(){
-/*
-        try {
-            documentParser.parseFiles("D:\\FolderToCalculateCosineSimilarityOf"); // give the location of source file
-            documentParser.tfIdfCalculator(); //calculates tfidf
-            documentParser.getCosineSimilarity();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return builderService.find();
+    }
+
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "count", produces = "application/json;charset=utf-8")
+    public @ResponseBody Number count(){
+        return builderService.count();
+    }
+
+
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "findUdc", produces = "application/json;charset=utf-8")
+    public @ResponseBody String findUdc(){
+        return builderService.findUdc();
     }
 
 

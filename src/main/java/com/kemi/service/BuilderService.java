@@ -8,6 +8,7 @@ import com.kemi.service.text.load.Loader;
 import com.kemi.storage.crawler.WebCrawler;
 import com.kemi.system.Sentence;
 import com.kemi.system.Word;
+import com.kemi.udc.UdcFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,8 @@ public class BuilderService {
     private Factory factory;
     @Autowired
     private WebCrawler webCrawler;
+    @Autowired
+    private UdcFinder udcFinder;
 
     @Autowired
     private EntitiesDao entitiesDao;
@@ -90,5 +93,14 @@ public class BuilderService {
     @Transactional
     public Collection<PdfLink> find() {
         return entitiesDao.get(PdfLink.class);
+    }
+
+    @Transactional
+    public Number count() {
+        return entitiesDao.count(PdfLink.class);
+    }
+
+    public String findUdc() {
+        return null;
     }
 }
