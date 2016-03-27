@@ -39,6 +39,13 @@
     <script src="/resources/jquery/jquery-2.1.3.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#sb").click(function(e){start();});
+
+            window.setInterval(function(){
+                find();
+            }, 5000);
+        });
+        start = function () {
             $.get("/new")
                     .done(function (data) {
                         console.log(data);
@@ -47,7 +54,17 @@
                     .fail(function (data) {
                         console.log(data)
                     });
-        });
+        };
+        find = function () {
+            $.get("/find")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#one").html(syntaxHighlight(data));
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                    });
+        };
         function syntaxHighlight(json) {
             if (typeof json != 'string') {
                 json = JSON.stringify(json, undefined, 2);
@@ -72,6 +89,7 @@
     </script>
 </head>
 <body>
+<p><input type ="button" id = "sb" value="Search Again"/></p>
 <pre><code>
     <div id="one"></div>
 </code></pre>

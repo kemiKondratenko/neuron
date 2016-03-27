@@ -1,13 +1,18 @@
 package com.kemi.service;
 
 import com.google.common.collect.Lists;
+import com.kemi.database.EntitiesDao;
+import com.kemi.entities.PdfLink;
 import com.kemi.service.factory.Factory;
 import com.kemi.service.text.load.Loader;
+import com.kemi.storage.crawler.WebCrawler;
 import com.kemi.system.Sentence;
 import com.kemi.system.Word;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.net.URL;
 import java.text.BreakIterator;
 import java.util.Collection;
 import java.util.List;
@@ -22,10 +27,23 @@ public class BuilderService {
     private Loader loader;
     @Autowired
     private Factory factory;
+    @Autowired
+    private WebCrawler webCrawler;
 
-    public Collection<Sentence> get() {
-        build(loader.loadText("/texts/n.txt"));
-        return factory.getSentences();
+    @Autowired
+    private EntitiesDao entitiesDao;
+
+    public Collection<String> get() {
+        try {
+            webCrawler.start(new URL("http://nz.ukma.edu.ua/"), 6000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //build(loader.loadText("/texts/n.txt"));
+        List<String> re = Lists.newArrayList();
+        re.addAll(webCrawler.getPdfLinks());
+        re.add(webCrawler.getPdfLinks().size() + "");
+        return re;//factory.getSentences();
     }
 
     private Collection<Sentence> build(String text) {
@@ -67,5 +85,10 @@ public class BuilderService {
             res.add(source.substring(start,end));
         }
         return res;
+    }
+
+    @Transactional
+    public Collection<PdfLink> find() {
+        return entitiesDao.get(PdfLink.class);
     }
 }
