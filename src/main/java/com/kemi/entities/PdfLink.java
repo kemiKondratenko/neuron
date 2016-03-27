@@ -1,6 +1,7 @@
 package com.kemi.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by Eugene on 27.03.2016.
@@ -18,7 +19,15 @@ public class PdfLink {
     @Column(name = "pdf_link")
     private String pdfLink;
 
+    @OneToMany(mappedBy = "pdfLink", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<LinkToUdc> linkToUdcs;
+
     public PdfLink() {}
+
+    public PdfLink(int id, String pdfLink) {
+        this.id = id;
+        this.pdfLink = pdfLink;
+    }
 
     public PdfLink(String pdfLink) {
         this.pdfLink = pdfLink;
@@ -38,6 +47,14 @@ public class PdfLink {
 
     public void setPdfLink(String pdfLink) {
         this.pdfLink = pdfLink;
+    }
+
+    public Set<LinkToUdc> getLinkToUdcs() {
+        return linkToUdcs;
+    }
+
+    public void setLinkToUdcs(Set<LinkToUdc> linkToUdcs) {
+        this.linkToUdcs = linkToUdcs;
     }
 
     @Override

@@ -23,6 +23,10 @@ public class EntitiesDao {
         return (Integer) getSession().save(publisher);
     }
 
+    public <T> T get(Class<T> tClass, int id){
+        return (T) getSession().get(tClass, id);
+    }
+
     public <T> List<T> get(Class<T> tClass){
         String fullClassName = tClass.getName();
         fullClassName = fullClassName.substring(fullClassName.lastIndexOf(".")+1, fullClassName.length());

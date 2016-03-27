@@ -27,5 +27,7 @@
         <property name="hibernate.c3p0.validate">true</property>
 
         <mapping class="com.kemi.entities.PdfLink"/>
+        <mapping class="com.kemi.entities.UdcEntity"/>
+        <mapping class="com.kemi.entities.LinkToUdc"/>
     </session-factory>
 </hibernate-configuration>

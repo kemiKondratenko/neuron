@@ -1,5 +1,6 @@
 package com.kemi.service;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
 import com.kemi.entities.PdfLink;
@@ -92,7 +93,12 @@ public class BuilderService {
 
     @Transactional
     public Collection<PdfLink> find() {
-        return entitiesDao.get(PdfLink.class);
+        return Lists.transform(entitiesDao.get(PdfLink.class), new Function<PdfLink, PdfLink>() {
+            @Override
+            public PdfLink apply(PdfLink from) {
+                return new PdfLink(from.getId(), from.getPdfLink());
+            }
+        });
     }
 
     @Transactional
@@ -100,7 +106,8 @@ public class BuilderService {
         return entitiesDao.count(PdfLink.class);
     }
 
+    @Transactional
     public String findUdc() {
-        return null;
+        return udcFinder.index();
     }
 }
