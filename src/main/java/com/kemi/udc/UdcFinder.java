@@ -68,7 +68,7 @@ public class UdcFinder {
             char c = text.charAt(i);
             if(isNumber(c) || c == '.' || c == '+' || c == ':' || c == '/')
                 resS.append(c);
-            else if(c == ';' || c == ' '){
+            else if(c == ';'){
                 if(StringUtils.isNotBlank(resS.toString()))
                     res.add(resS.toString());
                 resS = new StringBuilder("");
@@ -94,7 +94,7 @@ public class UdcFinder {
             udc = text.indexOf("удк");
         }
         if (udc > 0) {
-            res = text.substring(udc + 4, text.indexOf("\r\n", udc));
+            res = text.substring(udc + 4, text.indexOf("\r\n", udc)).replace(" ", "");
         }
         return res;
     }
