@@ -37,17 +37,12 @@ public class BuilderService {
     @Autowired
     private EntitiesDao entitiesDao;
 
-    public Collection<String> get() {
+    public void get() {
         try {
             webCrawler.start(new URL("http://nz.ukma.edu.ua/"), 6000);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //build(loader.loadText("/texts/n.txt"));
-        List<String> re = Lists.newArrayList();
-        re.addAll(webCrawler.getPdfLinks());
-        re.add(webCrawler.getPdfLinks().size() + "");
-        return re;//factory.getSentences();
     }
 
     private Collection<Sentence> build(String text) {

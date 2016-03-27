@@ -27,16 +27,9 @@ public class MainController {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "new", produces = "application/json;charset=utf-8")
-    public @ResponseBody Collection<String> getBook(){
-/*
-        try {
-            documentParser.parseFiles("D:\\FolderToCalculateCosineSimilarityOf"); // give the location of source file
-            documentParser.tfIdfCalculator(); //calculates tfidf
-            documentParser.getCosineSimilarity();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-        return builderService.get();
+    public @ResponseBody String getBook(){
+        builderService.get();
+        return "ok";
     }
 
 
