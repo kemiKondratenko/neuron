@@ -23,6 +23,10 @@ public class TextWordEntityDao {
     private Map<String, TextWordEntity> cache = Maps.newHashMap();
 
     public TextWordEntity find(PdfLink link, WordEntity word) {
+        if(cache.size() > 5000){
+            cache.clear();
+        }
+
         String key = TextWordEntity.stringId(link.getId(), word.getId());
         if(!cache.containsKey(key)){
             List<TextWordEntity> textWordEntities = entitiesDao.get(TextWordEntity.class,

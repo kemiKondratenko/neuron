@@ -21,6 +21,9 @@ public class WordDao {
     private Map<String, WordEntity> cache = Maps.newHashMap();
 
     public WordEntity find(String href) {
+        if(cache.size() > 5000){
+            cache.clear();
+        }
         if(!cache.containsKey(href)){
             List<WordEntity> wordEntities = entitiesDao.get(WordEntity.class, Restrictions.eq("word", href));
             if(!wordEntities.isEmpty())
