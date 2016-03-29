@@ -4,10 +4,9 @@
 
 
     <cache name="wordCache"
-           maxElementsInMemory="2000"
+           maxElementsInMemory="5000"
            eternal="false"
-           timeToIdleSeconds="1800"
-           timeToLiveSeconds="3600"
+           timeToIdleSeconds="60"
            overflowToDisk="false"
     />
 </ehcache>
