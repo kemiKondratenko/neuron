@@ -1,7 +1,7 @@
 package com.kemi.database;
 
 import com.google.common.collect.Maps;
-import com.kemi.system.Word;
+import com.kemi.entities.WordEntity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +20,22 @@ public class WordDao {
     @Autowired
     private EntitiesDao entitiesDao;
 
-    private Map<String, Word> cache = Maps.newHashMap();
+    private Map<String, WordEntity> cache = Maps.newHashMap();
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public List<Word> find(String href) {
-        return entitiesDao.get(Word.class, Restrictions.eq("word", href));
+    public List<WordEntity> find(String href) {
+        return entitiesDao.get(WordEntity.class, Restrictions.eq("word", href));
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public Word create(String href) {
-        List<Word> forUrl = find(href);
+    public WordEntity create(String href) {
+        List<WordEntity> forUrl = find(href);
         forUrl.remove(null);
         Integer i;
         if(CollectionUtils.isEmpty(forUrl)) {
-            Word pdfLink = new Word(href);
+            WordEntity pdfLink = new WordEntity(href);
             i = entitiesDao.save(pdfLink);
-            cache.put(href, entitiesDao.get(Word.class, i));
+            cache.put(href, entitiesDao.get(WordEntity.class, i));
         }
         return cache.get(href);
     }

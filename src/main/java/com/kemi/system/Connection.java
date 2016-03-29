@@ -1,23 +1,25 @@
 package com.kemi.system;
 
+import com.kemi.entities.WordEntity;
+
 /**
  * Created by Eugene on 16.03.2016.
  */
 public class Connection {
 
-    private Word word;
+    private WordEntity word;
     private Integer weight;
 
-    public Connection(Word word, Integer weight) {
+    public Connection(WordEntity word, Integer weight) {
         this.word = word;
         this.weight = weight;
     }
 
-    public Word getWord() {
+    public WordEntity getWord() {
         return word;
     }
 
-    public void setWord(Word word) {
+    public void setWord(WordEntity word) {
         this.word = word;
     }
 

@@ -5,7 +5,7 @@ import com.kemi.database.EntitiesDao;
 import com.kemi.database.WordDao;
 import com.kemi.entities.PdfLink;
 import com.kemi.service.text.load.Loader;
-import com.kemi.system.Word;
+import com.kemi.entities.WordEntity;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class DocumentParser {
 
     private void parseAndBuildWords(PdfLink link, String text) {
         for (String s : text.split("\\w+")) {
-            Word word = wordDao.create(s);
+            WordEntity word = wordDao.create(s);
         }
     }
 

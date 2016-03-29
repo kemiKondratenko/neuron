@@ -1,5 +1,7 @@
 package com.kemi.system;
 
+import com.kemi.entities.WordEntity;
+
 import java.util.List;
 
 /**
@@ -8,9 +10,9 @@ import java.util.List;
 public class Sentence {
 
     private String sentence;
-    private List<Word> words;
+    private List<WordEntity> words;
 
-    public Sentence(String sentence, List<Word> words) {
+    public Sentence(String sentence, List<WordEntity> words) {
         this.sentence = sentence;
         this.words = words;
     }
@@ -23,11 +25,11 @@ public class Sentence {
         this.sentence = sentence;
     }
 
-    public List<Word> getWords() {
+    public List<WordEntity> getWords() {
         return words;
     }
 
-    public void setWords(List<Word> words) {
+    public void setWords(List<WordEntity> words) {
         this.words = words;
     }
 

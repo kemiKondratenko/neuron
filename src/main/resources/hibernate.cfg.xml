@@ -29,5 +29,7 @@
         <mapping class="com.kemi.entities.PdfLink"/>
         <mapping class="com.kemi.entities.UdcEntity"/>
         <mapping class="com.kemi.entities.LinkToUdc"/>
+        <mapping class="com.kemi.entities.WordEntity"/>
+        <mapping class="com.kemi.entities.TextWordEntity"/>
     </session-factory>
 </hibernate-configuration>
