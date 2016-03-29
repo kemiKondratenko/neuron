@@ -23,7 +23,7 @@ public class TextWordEntityDao {
     private Map<String, TextWordEntity> cache = Maps.newHashMap();
 
     public TextWordEntity find(PdfLink link, WordEntity word) {
-        if(cache.size() > 5000){
+        if(cache.size() > 10000){
             cache.clear();
         }
 
@@ -47,7 +47,6 @@ public class TextWordEntityDao {
             cache.put(textWordEntity.stringId(), forUrl);
         } else {
             entitiesDao.update(forUrl.inc());
-           // System.out.println("key "+ forUrl.stringId()+" now is "+forUrl.getCount());
         }
         return forUrl;
     }
