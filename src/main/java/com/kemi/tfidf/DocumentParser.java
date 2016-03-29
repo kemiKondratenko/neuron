@@ -45,7 +45,8 @@ public class DocumentParser {
         }
     }
 
-    private void parseAndBuildWords(PdfLink link, String text) {
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void parseAndBuildWords(PdfLink link, String text) {
         StringBuilder stringBuilder = new StringBuilder("");
         for (int i = 0; i < text.length(); i++) {
             char c = Character.toLowerCase(text.charAt(i));
