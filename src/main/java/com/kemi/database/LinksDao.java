@@ -28,7 +28,6 @@ public class LinksDao {
         }
     }
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void indexed(PdfLink link) {
         link.setIndexed(true);
         entitiesDao.update(link);
