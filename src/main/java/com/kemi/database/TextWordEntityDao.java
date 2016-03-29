@@ -47,7 +47,7 @@ public class TextWordEntityDao {
             cache.put(textWordEntity.stringId(), forUrl);
         } else {
             entitiesDao.update(forUrl.inc());
-            System.out.println("key "+ forUrl.stringId()+" now is "+forUrl.getCount());
+           // System.out.println("key "+ forUrl.stringId()+" now is "+forUrl.getCount());
         }
         return forUrl;
     }
