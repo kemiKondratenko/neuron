@@ -8,7 +8,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +22,6 @@ public class TextWordEntityDao {
 
     private Map<String, TextWordEntity> cache = Maps.newHashMap();
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public TextWordEntity find(PdfLink link, WordEntity word) {
         String key = TextWordEntity.stringId(link.getId(), word.getId());
         if(!cache.containsKey(key)){
@@ -36,8 +34,6 @@ public class TextWordEntityDao {
         return cache.get(key);
     }
 
-
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public TextWordEntity create(PdfLink link, WordEntity word) {
         TextWordEntity forUrl = find(link, word);
         if(forUrl == null) {

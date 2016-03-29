@@ -109,8 +109,8 @@ public class TextWordEntity {
     }
 
     public static String stringId(int pdfLink, int wordEntity) {
-        return "pdfLink=" + pdfLink +
-                ", wordEntity=" + wordEntity;
+        return pdfLink +
+                "," + wordEntity;
     }
 
     public TextWordEntity inc() {

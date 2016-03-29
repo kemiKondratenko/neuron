@@ -6,7 +6,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,6 @@ public class WordDao {
 
     private Map<String, WordEntity> cache = Maps.newHashMap();
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public WordEntity find(String href) {
         if(!cache.containsKey(href)){
             List<WordEntity> wordEntities = entitiesDao.get(WordEntity.class, Restrictions.eq("word", href));
@@ -31,7 +29,6 @@ public class WordDao {
         return cache.get(href);
     }
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public WordEntity create(String href) {
         WordEntity forUrl = find(href);
         Integer i;
