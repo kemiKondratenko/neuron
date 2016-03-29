@@ -2,7 +2,6 @@ package com.kemi.database;
 
 import com.google.common.collect.Maps;
 import com.kemi.entities.WordEntity;
-import org.apache.commons.collections4.CollectionUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,20 +22,25 @@ public class WordDao {
     private Map<String, WordEntity> cache = Maps.newHashMap();
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public List<WordEntity> find(String href) {
-        return entitiesDao.get(WordEntity.class, Restrictions.eq("word", href));
+    public WordEntity find(String href) {
+        if(!cache.containsKey(href)){
+            List<WordEntity> wordEntities = entitiesDao.get(WordEntity.class, Restrictions.eq("word", href));
+            if(!wordEntities.isEmpty())
+                cache.put(href, wordEntities.get(0));
+        }
+        return cache.get(href);
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public WordEntity create(String href) {
-        List<WordEntity> forUrl = find(href);
-        forUrl.remove(null);
+        WordEntity forUrl = find(href);
         Integer i;
-        if(CollectionUtils.isEmpty(forUrl)) {
+        if(forUrl == null) {
             WordEntity pdfLink = new WordEntity(href);
             i = entitiesDao.save(pdfLink);
             cache.put(href, entitiesDao.get(WordEntity.class, i));
+            forUrl = cache.get(href);
         }
-        return cache.get(href);
+        return forUrl;
     }
 }

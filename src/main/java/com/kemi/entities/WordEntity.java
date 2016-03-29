@@ -18,6 +18,8 @@ public class WordEntity {
     @Column(name = "word")
     private String word;
 
+    public WordEntity() {}
+
     public WordEntity(String word) {
         this.word = word;
     }

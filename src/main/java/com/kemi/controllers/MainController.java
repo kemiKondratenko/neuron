@@ -61,5 +61,11 @@ public class MainController {
         return builderService.findUdc();
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "index", produces = "application/json;charset=utf-8")
+    public @ResponseBody String index(){
+        return builderService.index();
+    }
+
 
 }

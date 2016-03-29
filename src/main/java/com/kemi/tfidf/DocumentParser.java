@@ -1,17 +1,18 @@
 package com.kemi.tfidf;
 
-import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
+import com.kemi.database.LinksDao;
+import com.kemi.database.TextWordEntityDao;
 import com.kemi.database.WordDao;
 import com.kemi.entities.PdfLink;
-import com.kemi.service.text.load.Loader;
 import com.kemi.entities.WordEntity;
+import com.kemi.service.text.load.Loader;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.BreakIterator;
-import java.util.Collection;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -26,9 +27,14 @@ public class DocumentParser {
     private Loader loader;
     @Autowired
     private WordDao wordDao;
+    @Autowired
+    private TextWordEntityDao textWordEntityDao;
+    @Autowired
+    private LinksDao linksDao;
 
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void parseFiles() {
-        List<PdfLink> links = entitiesDao.get(PdfLink.class, Restrictions.isEmpty("linkToUdcs"));
+        List<PdfLink> links = entitiesDao.get(PdfLink.class, Restrictions.eq("indexed", false));
         buildWordEntities(links);
     }
 
@@ -40,24 +46,35 @@ public class DocumentParser {
     }
 
     private void parseAndBuildWords(PdfLink link, String text) {
-        for (String s : text.split("\\w+")) {
-            WordEntity word = wordDao.create(s);
+        StringBuilder stringBuilder = new StringBuilder("");
+        for (int i = 0; i < text.length(); i++) {
+            char c = Character.toLowerCase(text.charAt(i));
+            if(
+                    (c >= 'а' && c <= 'я')
+                            || c == 'є'
+                            || c == 'ї'
+                            || c == 'і'
+                            || c == 'ґ'
+                    ){
+                stringBuilder.append(c);
+            } else {
+                if (
+                        (
+                                c != '-'
+                                && c != '\''
+                                && c != '`'
+                                && c != '’'
+                        )
+                        && StringUtils.isNotBlank(stringBuilder.toString())
+                        ) {
+                    if(stringBuilder.length() > 2) {
+                        WordEntity wordE = wordDao.create(stringBuilder.toString());
+                        textWordEntityDao.create(link, wordE);
+                    }
+                    stringBuilder = new StringBuilder("");
+                }
+            }
         }
-    }
-
-    private Collection<String> getWordsAsString(String source) {
-        return get(source, BreakIterator.getWordInstance());
-    }
-
-    private List<String> get(String source, BreakIterator iterator) {
-        List<String> res = Lists.newArrayList();
-        iterator.setText(source);
-        int start = iterator.first();
-        for (int end = iterator.next();
-             end != BreakIterator.DONE;
-             start = end, end = iterator.next()) {
-            res.add(source.substring(start,end));
-        }
-        return res;
+        linksDao.indexed(link);
     }
 }

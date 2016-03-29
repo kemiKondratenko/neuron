@@ -27,4 +27,9 @@ public class LinksDao {
             entitiesDao.save(pdfLink);
         }
     }
+
+    public void indexed(PdfLink link) {
+        link.setIndexed(true);
+        entitiesDao.update(link);
+    }
 }

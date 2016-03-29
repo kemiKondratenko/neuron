@@ -57,4 +57,8 @@ public class EntitiesDao {
     private Session getSession(){
         return sessionFactory.getCurrentSession();
     }
+
+    public <T> T update(T object) {
+        return (T) getSession().merge(object);
+    }
 }

@@ -5,6 +5,7 @@ import com.kemi.database.EntitiesDao;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.UdcEntity;
 import com.kemi.storage.crawler.WebCrawler;
+import com.kemi.tfidf.DocumentParser;
 import com.kemi.udc.UdcFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,10 @@ public class BuilderService {
 
     @Autowired
     private EntitiesDao entitiesDao;
+    @Autowired
+    private DocumentParser documentParser;
 
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void get() {
         try {
             webCrawler.start(new URL("http://nz.ukma.edu.ua/"), 6000);
@@ -36,7 +40,7 @@ public class BuilderService {
         }
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Collection<UdcEntity> find() {
         List<UdcEntity> udcEntities = Lists.newArrayList();
         for (UdcEntity udcEntity : entitiesDao.get(UdcEntity.class)) {
@@ -45,18 +49,24 @@ public class BuilderService {
         return udcEntities;
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Number count() {
         return entitiesDao.count(PdfLink.class);
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String findUdc() {
         return udcFinder.index();
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Number udcCount() {
         return entitiesDao.count(UdcEntity.class);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String index() {
+        documentParser.parseFiles();
+        return "OK";
     }
 }

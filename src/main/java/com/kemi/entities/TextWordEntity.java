@@ -28,10 +28,10 @@ public class TextWordEntity {
 
     public TextWordEntity() {}
 
-    public TextWordEntity(WordEntity wordEntity, PdfLink pdfLink) {
+    public TextWordEntity(PdfLink pdfLink, WordEntity wordEntity) {
         this.wordEntity = wordEntity;
         this.pdfLink = pdfLink;
-        this.count = 0;
+        this.count = 1;
     }
 
     public int getId() {
@@ -97,5 +97,24 @@ public class TextWordEntity {
                 ", pdfLink=" + pdfLink +
                 ", count=" + count +
                 '}';
+    }
+
+    public String stringId() {
+        return stringId(pdfLink.getId(), wordEntity.getId());
+    }
+
+    public static String stringId(String pdfLink, String wordEntity) {
+        return "pdfLink=" + pdfLink +
+                ", wordEntity=" + wordEntity;
+    }
+
+    public static String stringId(int pdfLink, int wordEntity) {
+        return "pdfLink=" + pdfLink +
+                ", wordEntity=" + wordEntity;
+    }
+
+    public TextWordEntity inc() {
+        count++;
+        return this;
     }
 }

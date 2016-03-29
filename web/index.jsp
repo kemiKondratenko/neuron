@@ -41,6 +41,7 @@
         $(document).ready(function () {
             $("#sb").click(function(){start();});
             $("#findUdc").click(function(){findUdc();});
+            $("#index").click(function(){index();});
 
             window.setInterval(function(){
                 find();
@@ -92,6 +93,16 @@
                         console.log(data)
                     });
         };
+        index = function () {
+            $.get("/index")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#index").html(syntaxHighlight(data));
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                    });
+        };
         function syntaxHighlight(json) {
             if (typeof json != 'string') {
                 json = JSON.stringify(json, undefined, 2);
@@ -118,6 +129,7 @@
 <body>
 <p><input type ="button" id = "sb" value="Search Again"/></p>
 <p><input type ="button" id = "findUdc" value="Find UDC"/></p>
+<p><input type ="button" id = "index" value="Index found texts"/></p>
 <pre><code>
     <div id="count"></div>
     <div id="udcCount"></div>
