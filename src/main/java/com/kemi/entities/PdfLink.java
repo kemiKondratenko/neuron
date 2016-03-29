@@ -22,11 +22,15 @@ public class PdfLink {
     @OneToMany(mappedBy = "pdfLink", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<LinkToUdc> linkToUdcs;
 
+    @Column(name = "indexed")
+    private Boolean indexed;
+
     public PdfLink() {}
 
     public PdfLink(int id, String pdfLink) {
         this.id = id;
         this.pdfLink = pdfLink;
+        this.indexed = false;
     }
 
     public PdfLink(String pdfLink) {
@@ -36,6 +40,7 @@ public class PdfLink {
     public PdfLink(PdfLink pdfLink) {
         this.id = pdfLink.id;
         this.pdfLink = pdfLink.pdfLink;
+        this.indexed = pdfLink.indexed;
     }
 
     public int getId() {
@@ -60,6 +65,14 @@ public class PdfLink {
 
     public void setLinkToUdcs(Set<LinkToUdc> linkToUdcs) {
         this.linkToUdcs = linkToUdcs;
+    }
+
+    public Boolean getIndexed() {
+        return indexed;
+    }
+
+    public void setIndexed(Boolean indexed) {
+        this.indexed = indexed;
     }
 
     @Override
