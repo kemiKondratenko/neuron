@@ -4,6 +4,7 @@ import com.kemi.entities.PdfLink;
 import com.kemi.entities.TextWordEntity;
 import com.kemi.entities.WordEntity;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * Created by Eugene on 30.03.2016.
@@ -15,36 +16,37 @@ public class TextWordMongoEntity {
 
     private String wordEntity;
 
-    private String pdfLink;
+    private Integer pdfLink;
 
-    private String count;
+    @Field("count")
+    private Integer count;
 
     public TextWordMongoEntity() {
     }
 
-    public TextWordMongoEntity(int String, Integer wordEntity, Integer pdfLink, String count) {
+    public TextWordMongoEntity(int String, Integer wordEntity, Integer pdfLink, Integer count) {
         this.id = id;
         this.wordEntity = wordEntity.toString();
-        this.pdfLink = pdfLink.toString();
+        this.pdfLink = pdfLink;
         this.count = count;
     }
 
     public TextWordMongoEntity(TextWordEntity textWordEntity) {
         this.wordEntity = textWordEntity.getWordEntity().getId()+"";
-        this.pdfLink = textWordEntity.getPdfLink().getId()+"";
-        this.count = textWordEntity.getCount()+"";
+        this.pdfLink = textWordEntity.getPdfLink().getId();
+        this.count = textWordEntity.getCount();
     }
 
     public TextWordMongoEntity(PdfLink link, WordEntity wordE) {
         this.wordEntity = wordE.getId()+"";
-        this.pdfLink = link.getId()+"";
-        this.count = "0";
+        this.pdfLink = link.getId();
+        this.count = 0;
     }
 
     public TextWordMongoEntity(PdfLink link, WordMongoEntity wordE) {
         this.wordEntity = wordE.getId();
-        this.pdfLink = link.getId()+"";
-        this.count = "0";
+        this.pdfLink = link.getId();
+        this.count = 0;
     }
 
     public String getId() {
@@ -63,19 +65,19 @@ public class TextWordMongoEntity {
         this.wordEntity = wordEntity;
     }
 
-    public String getPdfLink() {
+    public Integer getPdfLink() {
         return pdfLink;
     }
 
-    public void setPdfLink(String pdfLink) {
+    public void setPdfLink(Integer pdfLink) {
         this.pdfLink = pdfLink;
     }
 
-    public String getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
@@ -83,7 +85,7 @@ public class TextWordMongoEntity {
         return stringId(pdfLink, wordEntity);
     }
 
-    public static String stringId(String pdfLink, String wordEntity) {
+    public static String stringId(Integer pdfLink, String wordEntity) {
         return "pdfLink=" + pdfLink +
                 ", wordEntity=" + wordEntity;
     }
@@ -94,7 +96,7 @@ public class TextWordMongoEntity {
     }
 
     public TextWordMongoEntity inc() {
-        count = ""+(Integer.valueOf(count)+1);
+        count++;
         return this;
     }
 

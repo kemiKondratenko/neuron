@@ -42,6 +42,7 @@
             $("#sb").click(function(){start();});
             $("#findUdc").click(function(){findUdc();});
             $("#index").click(function(){index();});
+            $("#ctf").click(function(){ctf();});
 
             window.setInterval(function(){
                 find();
@@ -103,6 +104,16 @@
                         console.log(data)
                     });
         };
+        ctf = function () {
+            $.get("/ctf")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#ctf").html(syntaxHighlight(data));
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                    });
+        };
         function syntaxHighlight(json) {
             if (typeof json != 'string') {
                 json = JSON.stringify(json, undefined, 2);
@@ -130,6 +141,7 @@
 <p><input type ="button" id = "sb" value="Search Again"/></p>
 <p><input type ="button" id = "findUdc" value="Find UDC"/></p>
 <p><input type ="button" id = "index" value="Index found texts"/></p>
+<p><input type ="button" id = "ctf" value=" term frequency"/></p>
 <pre><code>
     <div id="count"></div>
     <div id="udcCount"></div>

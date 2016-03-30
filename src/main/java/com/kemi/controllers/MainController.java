@@ -68,4 +68,11 @@ public class MainController {
     }
 
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "ctf", produces = "application/json;charset=utf-8")
+    public @ResponseBody String ctf(){
+        return builderService.ctf();
+    }
+
+
 }

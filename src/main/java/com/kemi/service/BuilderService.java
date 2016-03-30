@@ -6,6 +6,7 @@ import com.kemi.entities.PdfLink;
 import com.kemi.entities.UdcEntity;
 import com.kemi.storage.crawler.WebCrawler;
 import com.kemi.tfidf.DocumentParser;
+import com.kemi.tfidf.TfIdf;
 import com.kemi.udc.UdcFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,17 @@ import java.util.List;
 public class BuilderService {
 
     @Autowired
+    private EntitiesDao entitiesDao;
+
+    @Autowired
     private WebCrawler webCrawler;
     @Autowired
     private UdcFinder udcFinder;
 
     @Autowired
-    private EntitiesDao entitiesDao;
-    @Autowired
     private DocumentParser documentParser;
+    @Autowired
+    private TfIdf tfIdf;
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void get() {
@@ -68,5 +72,10 @@ public class BuilderService {
     public String index() {
         documentParser.parseFiles();
         return "OK";
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String ctf() {
+        return tfIdf.ctf();
     }
 }

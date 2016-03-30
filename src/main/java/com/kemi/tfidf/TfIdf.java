@@ -1,6 +1,10 @@
 package com.kemi.tfidf;
 
 import com.google.common.collect.Lists;
+import com.kemi.database.EntitiesDao;
+import com.kemi.entities.PdfLink;
+import com.kemi.mongo.MongoBase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +14,12 @@ import java.util.List;
  */
 @Service
 public class TfIdf {
+
+    @Autowired
+    private EntitiesDao entitiesDao;
+
+    @Autowired
+    private MongoBase mongoBase;
 
     /**
      * Calculates the tf of term termToCheck
@@ -71,5 +81,16 @@ public class TfIdf {
             tfidfDocsVector.add(tfidfvectors);  //storing document vectors;
         }
         return tfidfDocsVector;
+    }
+
+    public String ctf() {
+        for (PdfLink pdfLink : entitiesDao.get(PdfLink.class)) {
+            ctf(pdfLink.getId());
+        }
+        return "";
+    }
+
+    private void ctf(int id) {
+        int docTerms = mongoBase.getPdfLinkTermsAmount(id);
     }
 }
