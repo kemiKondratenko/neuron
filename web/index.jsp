@@ -43,6 +43,7 @@
             $("#findUdc").click(function(){findUdc();});
             $("#index").click(function(){index();});
             $("#ctf").click(function(){ctf();});
+            $("#cidf").click(function(){cidf();});
 
             window.setInterval(function(){
                 find();
@@ -114,6 +115,16 @@
                         console.log(data)
                     });
         };
+        cidf = function () {
+            $.get("/cidf")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#cidf").html(syntaxHighlight(data));
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                    });
+        };
         function syntaxHighlight(json) {
             if (typeof json != 'string') {
                 json = JSON.stringify(json, undefined, 2);
@@ -141,7 +152,8 @@
 <p><input type ="button" id = "sb" value="Search Again"/></p>
 <p><input type ="button" id = "findUdc" value="Find UDC"/></p>
 <p><input type ="button" id = "index" value="Index found texts"/></p>
-<p><input type ="button" id = "ctf" value=" term frequency"/></p>
+<p><input type ="button" id = "ctf" value="Term frequency"/></p>
+<p><input type ="button" id = "cidf" value="Inverse document frequency"/></p>
 <pre><code>
     <div id="count"></div>
     <div id="udcCount"></div>

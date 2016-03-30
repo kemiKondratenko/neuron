@@ -78,4 +78,9 @@ public class BuilderService {
     public String ctf() {
         return tfIdf.ctf();
     }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String cidf() {
+        return tfIdf.cidf();
+    }
 }

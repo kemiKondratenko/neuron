@@ -74,5 +74,11 @@ public class MainController {
         return builderService.ctf();
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "cidf", produces = "application/json;charset=utf-8")
+    public @ResponseBody String cidf(){
+        return builderService.cidf();
+    }
+
 
 }

@@ -104,9 +104,11 @@ public class TfIdf {
 
     private void ctf(int id) {
         int docTerms = mongoBase.getPdfLinkTermsAmount(id);
-        for (TextWordMongoEntity textWordMongoEntity : mongoBase.getPdfLinkTerms(id)) {
-            textWordMongoEntity.setTf(Double.valueOf(textWordMongoEntity.getCount())/Double.valueOf(docTerms));
-            mongoBase.save(textWordMongoEntity);
+        if(docTerms > 0) {
+            for (TextWordMongoEntity textWordMongoEntity : mongoBase.getPdfLinkTerms(id)) {
+                textWordMongoEntity.setTf(Double.valueOf(textWordMongoEntity.getCount()) / Double.valueOf(docTerms));
+                mongoBase.save(textWordMongoEntity);
+            }
         }
     }
 }

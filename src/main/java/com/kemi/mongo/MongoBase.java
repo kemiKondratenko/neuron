@@ -48,6 +48,9 @@ public class MongoBase {
         );
         AggregationResults<TextWordMongoEntity> result = mongoOperations.aggregate(agg, TextWordMongoEntity.class);
         List<TextWordMongoEntity> stateStatsList = result.getMappedResults();
+        if(stateStatsList.isEmpty()){
+            return 0;
+        }
         return stateStatsList.get(0).getCount();
     }
 
