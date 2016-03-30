@@ -1,8 +1,6 @@
 package com.kemi.entities.mongo;
 
 import com.kemi.entities.PdfLink;
-import com.kemi.entities.TextWordEntity;
-import com.kemi.entities.WordEntity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -31,18 +29,6 @@ public class TextWordMongoEntity {
         this.wordEntity = wordEntity.toString();
         this.pdfLink = pdfLink;
         this.count = count;
-    }
-
-    public TextWordMongoEntity(TextWordEntity textWordEntity) {
-        this.wordEntity = textWordEntity.getWordEntity().getId()+"";
-        this.pdfLink = textWordEntity.getPdfLink().getId();
-        this.count = textWordEntity.getCount();
-    }
-
-    public TextWordMongoEntity(PdfLink link, WordEntity wordE) {
-        this.wordEntity = wordE.getId()+"";
-        this.pdfLink = link.getId();
-        this.count = 0;
     }
 
     public TextWordMongoEntity(PdfLink link, WordMongoEntity wordE) {

@@ -98,6 +98,7 @@ public class TfIdf {
         for (WordMongoEntity wordMongoEntity : mongoBase.get(WordMongoEntity.class)) {
             Double wordCount = Double.valueOf(mongoBase.getWordsCount(wordMongoEntity.getId()));
             wordMongoEntity.setIdf(1 + Math.log(wordsCount / wordCount));
+            mongoBase.save(wordMongoEntity);
         }
         return "";
     }
