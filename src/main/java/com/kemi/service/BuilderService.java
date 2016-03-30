@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.UdcEntity;
+import com.kemi.mongo.MongoBase;
 import com.kemi.storage.crawler.WebCrawler;
 import com.kemi.tfidf.DocumentParser;
 import com.kemi.udc.UdcFinder;
@@ -30,6 +31,8 @@ public class BuilderService {
     private EntitiesDao entitiesDao;
     @Autowired
     private DocumentParser documentParser;
+    @Autowired
+    private MongoBase mongoBase;
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void get() {
