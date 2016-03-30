@@ -5,6 +5,7 @@ import com.kemi.database.TextWordEntityDao;
 import com.kemi.database.WordDao;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.WordEntity;
+import com.kemi.mongo.MongoBase;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,9 @@ public class ParseAndBuilder {
     @Autowired
     private WordDao wordDao;
     @Autowired
-    private TextWordEntityDao textWordEntityDao;
-    @Autowired
     private LinksDao linksDao;
+    @Autowired
+    private MongoBase mongoBase;
     private static  int one = 0;
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
@@ -51,7 +52,7 @@ public class ParseAndBuilder {
                         if (stringBuilder.length() > 2) {
                             one++;
                             WordEntity wordE = wordDao.create(stringBuilder.toString());
-                            textWordEntityDao.create(link, wordE);
+                            mongoBase.create(link, wordE);
                         }
                         stringBuilder = new StringBuilder("");
                     }
