@@ -3,7 +3,10 @@ package com.kemi.tfidf;
 import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
 import com.kemi.entities.PdfLink;
+import com.kemi.entities.mongo.TextWordMongoEntity;
+import com.kemi.entities.mongo.WordMongoEntity;
 import com.kemi.mongo.MongoBase;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,13 +87,26 @@ public class TfIdf {
     }
 
     public String ctf() {
-        for (PdfLink pdfLink : entitiesDao.get(PdfLink.class)) {
+        for (PdfLink pdfLink : entitiesDao.get(PdfLink.class, Restrictions.eq("indexed", true))) {
             ctf(pdfLink.getId());
+        }
+        return "";
+    }
+
+    public String cidf() {
+        Double wordsCount = Double.valueOf(mongoBase.getWordsCount());
+        for (WordMongoEntity wordMongoEntity : mongoBase.get(WordMongoEntity.class)) {
+            Double wordCount = Double.valueOf(mongoBase.getWordsCount(wordMongoEntity.getId()));
+            wordMongoEntity.setIdf(1 + Math.log(wordsCount / wordCount));
         }
         return "";
     }
 
     private void ctf(int id) {
         int docTerms = mongoBase.getPdfLinkTermsAmount(id);
+        for (TextWordMongoEntity textWordMongoEntity : mongoBase.getPdfLinkTerms(id)) {
+            textWordMongoEntity.setTf(Double.valueOf(textWordMongoEntity.getCount())/Double.valueOf(docTerms));
+            mongoBase.save(textWordMongoEntity);
+        }
     }
 }

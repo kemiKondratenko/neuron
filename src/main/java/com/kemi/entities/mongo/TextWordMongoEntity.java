@@ -21,6 +21,8 @@ public class TextWordMongoEntity {
     @Field("count")
     private Integer count;
 
+    private Double tf;
+
     public TextWordMongoEntity() {
     }
 
@@ -83,6 +85,14 @@ public class TextWordMongoEntity {
 
     public String stringId() {
         return stringId(pdfLink, wordEntity);
+    }
+
+    public Double getTf() {
+        return tf;
+    }
+
+    public void setTf(Double tf) {
+        this.tf = tf;
     }
 
     public static String stringId(Integer pdfLink, String wordEntity) {

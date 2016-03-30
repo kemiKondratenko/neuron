@@ -43,8 +43,8 @@ public class MongoBase {
     public int getPdfLinkTermsAmount(int id) {
         TypedAggregation<TextWordMongoEntity> agg = Aggregation.newAggregation(
                 TextWordMongoEntity.class,
-                Aggregation.group("pdfLink").sum("count").as("count"),
-                Aggregation.match(Criteria.where("id").is(id))
+                Aggregation.match(Criteria.where("pdfLink").is(id)),
+                Aggregation.group().sum("count").as("count")
         );
         AggregationResults<TextWordMongoEntity> result = mongoOperations.aggregate(agg, TextWordMongoEntity.class);
         List<TextWordMongoEntity> stateStatsList = result.getMappedResults();
@@ -52,4 +52,39 @@ public class MongoBase {
     }
 
 
+    public List<TextWordMongoEntity> getPdfLinkTerms(int id) {
+        Query findQuery = new Query();
+        Criteria mainCriteria = Criteria.where("pdfLink").is(id);
+        findQuery.addCriteria(mainCriteria);
+        return mongoOperations.find(findQuery, TextWordMongoEntity.class);
+    }
+
+    public <T> void save(T textWordMongoEntity) {
+        mongoOperations.save(textWordMongoEntity);
+    }
+
+    public <T> List<T> get(Class<T> wordMongoEntityClass) {
+        return mongoOperations.findAll(wordMongoEntityClass);
+    }
+
+    public int getWordsCount() {
+        TypedAggregation<TextWordMongoEntity> agg = Aggregation.newAggregation(
+                TextWordMongoEntity.class,
+                Aggregation.group().sum("count").as("count")
+        );
+        AggregationResults<TextWordMongoEntity> result = mongoOperations.aggregate(agg, TextWordMongoEntity.class);
+        List<TextWordMongoEntity> stateStatsList = result.getMappedResults();
+        return stateStatsList.get(0).getCount();
+    }
+
+    public int getWordsCount(String id) {
+        TypedAggregation<TextWordMongoEntity> agg = Aggregation.newAggregation(
+                TextWordMongoEntity.class,
+                Aggregation.match(Criteria.where("wordEntity").is(id)),
+                Aggregation.group().sum("count").as("count")
+        );
+        AggregationResults<TextWordMongoEntity> result = mongoOperations.aggregate(agg, TextWordMongoEntity.class);
+        List<TextWordMongoEntity> stateStatsList = result.getMappedResults();
+        return stateStatsList.get(0).getCount();
+    }
 }

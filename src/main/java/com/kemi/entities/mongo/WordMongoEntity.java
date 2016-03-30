@@ -12,6 +12,8 @@ public class WordMongoEntity {
 
     private String word;
 
+    private Double idf;
+
     public WordMongoEntity() {
     }
 
@@ -33,6 +35,14 @@ public class WordMongoEntity {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public Double getIdf() {
+        return idf;
+    }
+
+    public void setIdf(Double idf) {
+        this.idf = idf;
     }
 
     @Override
