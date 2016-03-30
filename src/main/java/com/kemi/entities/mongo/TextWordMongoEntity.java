@@ -13,9 +13,9 @@ public class TextWordMongoEntity {
     @Id
     private String id;
 
-    private Integer wordEntity;
+    private String wordEntity;
 
-    private Integer pdfLink;
+    private String pdfLink;
 
     private String count;
 
@@ -24,20 +24,26 @@ public class TextWordMongoEntity {
 
     public TextWordMongoEntity(int String, Integer wordEntity, Integer pdfLink, String count) {
         this.id = id;
-        this.wordEntity = wordEntity;
-        this.pdfLink = pdfLink;
+        this.wordEntity = wordEntity.toString();
+        this.pdfLink = pdfLink.toString();
         this.count = count;
     }
 
     public TextWordMongoEntity(TextWordEntity textWordEntity) {
-        this.wordEntity = textWordEntity.getWordEntity().getId();
-        this.pdfLink = textWordEntity.getPdfLink().getId();
+        this.wordEntity = textWordEntity.getWordEntity().getId()+"";
+        this.pdfLink = textWordEntity.getPdfLink().getId()+"";
         this.count = textWordEntity.getCount()+"";
     }
 
     public TextWordMongoEntity(PdfLink link, WordEntity wordE) {
+        this.wordEntity = wordE.getId()+"";
+        this.pdfLink = link.getId()+"";
+        this.count = "0";
+    }
+
+    public TextWordMongoEntity(PdfLink link, WordMongoEntity wordE) {
         this.wordEntity = wordE.getId();
-        this.pdfLink = link.getId();
+        this.pdfLink = link.getId()+"";
         this.count = "0";
     }
 
@@ -49,19 +55,19 @@ public class TextWordMongoEntity {
         this.id = id;
     }
 
-    public Integer getWordEntity() {
+    public String getWordEntity() {
         return wordEntity;
     }
 
-    public void setWordEntity(Integer wordEntity) {
+    public void setWordEntity(String wordEntity) {
         this.wordEntity = wordEntity;
     }
 
-    public Integer getPdfLink() {
+    public String getPdfLink() {
         return pdfLink;
     }
 
-    public void setPdfLink(Integer pdfLink) {
+    public void setPdfLink(String pdfLink) {
         this.pdfLink = pdfLink;
     }
 

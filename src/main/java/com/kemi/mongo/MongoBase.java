@@ -3,6 +3,7 @@ package com.kemi.mongo;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.WordEntity;
 import com.kemi.entities.mongo.TextWordMongoEntity;
+import com.kemi.entities.mongo.WordMongoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,7 +19,7 @@ public class MongoBase {
     @Autowired
     private MongoOperations mongoOperations;
 
-    public void create(PdfLink link, WordEntity wordE) {
+    public void create(PdfLink link, WordMongoEntity wordE) {
         TextWordMongoEntity textWordEntity = find(link, wordE);
         if(textWordEntity == null){
             textWordEntity = new TextWordMongoEntity(link, wordE);
@@ -27,7 +28,7 @@ public class MongoBase {
         mongoOperations.save(textWordEntity);
     }
 
-    private TextWordMongoEntity find(PdfLink link, WordEntity wordE) {
+    private TextWordMongoEntity find(PdfLink link, WordMongoEntity wordE) {
         Query findQuery = new Query();
         Criteria mainCriteria = Criteria.where("pdfLink").is(link.getId()).
                 andOperator(Criteria.where("wordEntity").is(wordE.getId()));

@@ -1,10 +1,9 @@
 package com.kemi.tfidf;
 
 import com.kemi.database.LinksDao;
-import com.kemi.database.TextWordEntityDao;
 import com.kemi.database.WordDao;
 import com.kemi.entities.PdfLink;
-import com.kemi.entities.WordEntity;
+import com.kemi.entities.mongo.WordMongoEntity;
 import com.kemi.mongo.MongoBase;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +50,7 @@ public class ParseAndBuilder {
                             ) {
                         if (stringBuilder.length() > 2) {
                             one++;
-                            WordEntity wordE = wordDao.create(stringBuilder.toString());
+                            WordMongoEntity wordE = wordDao.create(stringBuilder.toString());
                             mongoBase.create(link, wordE);
                         }
                         stringBuilder = new StringBuilder("");
