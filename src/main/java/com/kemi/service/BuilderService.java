@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.UdcEntity;
+import com.kemi.entities.WordEntity;
 import com.kemi.mongo.MongoBase;
 import com.kemi.storage.crawler.WebCrawler;
 import com.kemi.tfidf.DocumentParser;
@@ -59,7 +60,9 @@ public class BuilderService {
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String findUdc() {
-        return udcFinder.index();
+        //mongoBase.pushAllToMongo();
+        mongoBase.create(new PdfLink(), new WordEntity());
+        return "";
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)

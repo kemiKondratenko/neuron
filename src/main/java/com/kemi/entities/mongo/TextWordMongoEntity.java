@@ -1,6 +1,8 @@
 package com.kemi.entities.mongo;
 
+import com.kemi.entities.PdfLink;
 import com.kemi.entities.TextWordEntity;
+import com.kemi.entities.WordEntity;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -9,18 +11,18 @@ import org.springframework.data.annotation.Id;
 public class TextWordMongoEntity {
 
     @Id
-    private int id;
+    private String id;
 
     private Integer wordEntity;
 
     private Integer pdfLink;
 
-    private int count;
+    private String count;
 
     public TextWordMongoEntity() {
     }
 
-    public TextWordMongoEntity(int id, Integer wordEntity, Integer pdfLink, int count) {
+    public TextWordMongoEntity(int String, Integer wordEntity, Integer pdfLink, String count) {
         this.id = id;
         this.wordEntity = wordEntity;
         this.pdfLink = pdfLink;
@@ -30,14 +32,20 @@ public class TextWordMongoEntity {
     public TextWordMongoEntity(TextWordEntity textWordEntity) {
         this.wordEntity = textWordEntity.getWordEntity().getId();
         this.pdfLink = textWordEntity.getPdfLink().getId();
-        this.count = textWordEntity.getCount();
+        this.count = textWordEntity.getCount()+"";
     }
 
-    public int getId() {
+    public TextWordMongoEntity(PdfLink link, WordEntity wordE) {
+        this.wordEntity = wordE.getId();
+        this.pdfLink = link.getId();
+        this.count = "0";
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -57,11 +65,11 @@ public class TextWordMongoEntity {
         this.pdfLink = pdfLink;
     }
 
-    public int getCount() {
+    public String getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(String count) {
         this.count = count;
     }
 
@@ -80,7 +88,7 @@ public class TextWordMongoEntity {
     }
 
     public TextWordMongoEntity inc() {
-        count++;
+        count = ""+(Integer.valueOf(count)+1);
         return this;
     }
 
@@ -100,20 +108,20 @@ public class TextWordMongoEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = id.hashCode();
         result = 31 * result + (wordEntity != null ? wordEntity.hashCode() : 0);
         result = 31 * result + (pdfLink != null ? pdfLink.hashCode() : 0);
-        result = 31 * result + count;
+        result = 31 * result + count.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "TextWordMongoEntity{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", wordEntity=" + wordEntity +
                 ", pdfLink=" + pdfLink +
-                ", count=" + count +
+                ", count='" + count + '\'' +
                 '}';
     }
 }
