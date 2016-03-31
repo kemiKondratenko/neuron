@@ -2,6 +2,7 @@ package com.kemi.service;
 
 import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
+import com.kemi.entities.JsonDots;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.UdcEntity;
 import com.kemi.storage.crawler.WebCrawler;
@@ -82,5 +83,10 @@ public class BuilderService {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String cidf() {
         return tfIdf.cidf();
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public List<JsonDots> getDots() {
+        return tfIdf.getDots();
     }
 }

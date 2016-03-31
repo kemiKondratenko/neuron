@@ -2,6 +2,7 @@ package com.kemi.tfidf;
 
 import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
+import com.kemi.entities.JsonDots;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.mongo.TextWordMongoEntity;
 import com.kemi.entities.mongo.WordMongoEntity;
@@ -111,5 +112,15 @@ public class TfIdf {
                 mongoBase.save(textWordMongoEntity);
             }
         }
+    }
+
+    public List<JsonDots> getDots() {
+        List<JsonDots> dots = Lists.newArrayList();
+        for (WordMongoEntity wordMongoEntity : mongoBase.get(WordMongoEntity.class)) {
+            for (TextWordMongoEntity textWordMongoEntity : mongoBase.getPdfLinkTerms(wordMongoEntity.getId())) {
+                dots.add(new JsonDots(wordMongoEntity.getIdf(), textWordMongoEntity.getTf()));
+            }
+        }
+        return dots;
     }
 }

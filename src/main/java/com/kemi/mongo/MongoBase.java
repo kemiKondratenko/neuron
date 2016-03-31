@@ -62,6 +62,13 @@ public class MongoBase {
         return mongoOperations.find(findQuery, TextWordMongoEntity.class);
     }
 
+    public List<TextWordMongoEntity> getPdfLinkTerms(String id) {
+        Query findQuery = new Query();
+        Criteria mainCriteria = Criteria.where("wordEntity").is(id);
+        findQuery.addCriteria(mainCriteria);
+        return mongoOperations.find(findQuery, TextWordMongoEntity.class);
+    }
+
     public <T> void save(T textWordMongoEntity) {
         mongoOperations.save(textWordMongoEntity);
     }

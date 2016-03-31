@@ -1,5 +1,6 @@
 package com.kemi.controllers;
 
+import com.kemi.entities.JsonDots;
 import com.kemi.entities.UdcEntity;
 import com.kemi.service.BuilderService;
 import com.kemi.tfidf.DocumentParser;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Eugene on 16.03.2016.
@@ -78,6 +80,13 @@ public class MainController {
     @RequestMapping(value = "cidf", produces = "application/json;charset=utf-8")
     public @ResponseBody String cidf(){
         return builderService.cidf();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "loadDots", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    List<JsonDots> loadDots(){
+        return builderService.getDots();
     }
 
 
