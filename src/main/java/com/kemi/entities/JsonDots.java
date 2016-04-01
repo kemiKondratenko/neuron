@@ -9,12 +9,14 @@ public class JsonDots {
     private Double y_axis;
     private int radius;
     private String color;
+    private String word;
 
-    public JsonDots(Double x_axis, Double y_axis) {
+    public JsonDots(Double x_axis, Double y_axis, String word) {
         this.x_axis = x_axis;
         this.y_axis = y_axis;
         this.radius = 5;
         this.color = "black";
+        this.word = word;
     }
 
     public Double getX_axis() {
@@ -47,5 +49,13 @@ public class JsonDots {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
     }
 }

@@ -97,4 +97,8 @@ public class MongoBase {
         List<TextWordMongoEntity> stateStatsList = result.getMappedResults();
         return stateStatsList.get(0).getCount();
     }
+
+    public List<TextWordMongoEntity> getPdfLinkTerms() {
+        return mongoOperations.findAll(TextWordMongoEntity.class);
+    }
 }

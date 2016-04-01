@@ -37,8 +37,8 @@
 <body>
 <script>
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+            width = 1500 - margin.left - margin.right,
+            height = 20000 - margin.top - margin.bottom;
 
     /*
      * value accessor - returns the value to encode for a given data object.
@@ -78,9 +78,10 @@
     // load data
     d3.json("/loadDots", function(error, data) {
 
+       var y_max = d3.max(data, yValue);
         // don't want dots overlapping axis, so add in buffer to data domain
         xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
-        yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
+        yScale.domain([0, y_max+(y_max/2)]);
 
         // x-axis
         svg.append("g")
@@ -111,7 +112,7 @@
                 .data(data)
                 .enter().append("circle")
                 .attr("class", "dot")
-                .attr("r", 3.5)
+                .attr("r", 1.5)
                 .attr("cx", xMap)
                 .attr("cy", yMap)
                 .style("fill", function(d) { return color(cValue(d));})
@@ -119,7 +120,7 @@
                     tooltip.transition()
                             .duration(200)
                             .style("opacity", .9);
-                    tooltip.html(d["Cereal Name"] + "<br/> (" + xValue(d)
+                    tooltip.html('<span color="red">'+d.word+' </span>' + "<br/> (" + xValue(d)
                                     + ", " + yValue(d) + ")")
                             .style("left", (d3.event.pageX + 5) + "px")
                             .style("top", (d3.event.pageY - 28) + "px");

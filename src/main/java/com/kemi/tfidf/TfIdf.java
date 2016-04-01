@@ -117,9 +117,13 @@ public class TfIdf {
     public List<JsonDots> getDots() {
         List<JsonDots> dots = Lists.newArrayList();
         for (WordMongoEntity wordMongoEntity : mongoBase.get(WordMongoEntity.class)) {
+            double tfBuffer = 0;
+            double count = 0;
             for (TextWordMongoEntity textWordMongoEntity : mongoBase.getPdfLinkTerms(wordMongoEntity.getId())) {
-                dots.add(new JsonDots(wordMongoEntity.getIdf(), textWordMongoEntity.getTf()));
+                tfBuffer += textWordMongoEntity.getTf();
+                count++;
             }
+            dots.add(new JsonDots(wordMongoEntity.getIdf(), tfBuffer/count, wordMongoEntity.getWord()));
         }
         return dots;
     }
