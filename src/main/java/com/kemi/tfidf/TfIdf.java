@@ -25,68 +25,6 @@ public class TfIdf {
     @Autowired
     private MongoBase mongoBase;
 
-    /**
-     * Calculates the tf of term termToCheck
-     * @param totalterms : Array of all the words under processing document
-     * @param termToCheck : term of which tf is to be calculated.
-     * @return tf(term frequency) of term termToCheck
-     */
-    public double tfCalculator(String[] totalterms, String termToCheck) {
-        double count = 0;  //to count the overall occurrence of the term termToCheck
-        for (String s : totalterms) {
-            if (s.equalsIgnoreCase(termToCheck)) {
-                count++;
-            }
-        }
-        return count / totalterms.length;
-    }
-
-    /**
-     * Calculates idf of term termToCheck
-     * @param allTerms : all the terms of all the documents
-     * @param termToCheck
-     * @return idf(inverse document frequency) score
-     */
-    public double idfCalculator(List<String[]> allTerms, String termToCheck) {
-        double count = 0;
-        for (String[] ss : allTerms) {
-            for (String s : ss) {
-                if (s.equalsIgnoreCase(termToCheck)) {
-                    count++;
-                    break;
-                }
-            }
-        }
-        return 1 + Math.log(allTerms.size() / count);
-    }
-
-
-
-    /**
-     * Method to create termVector according to its tfidf score.
-     * @param termsDocsArray
-     * @param allTerms
-     */
-    public List<Double[]> tfIdfCalculator(List<String[]> termsDocsArray, String[] allTerms) {
-        double tf; //term frequency
-        double idf; //inverse document frequency
-        double tfidf; //term requency inverse document frequency
-        List<Double[]> tfidfDocsVector = Lists.newArrayList();
-        for (String[] docTermsArray : termsDocsArray) {
-            Double[] tfidfvectors = new Double[allTerms.length];
-            int count = 0;
-            for (String terms : allTerms) {
-                tf = tfCalculator(docTermsArray, terms);
-                idf = idfCalculator(termsDocsArray, terms);
-                tfidf = tf * idf;
-                tfidfvectors[count] = tfidf;
-                count++;
-            }
-            tfidfDocsVector.add(tfidfvectors);  //storing document vectors;
-        }
-        return tfidfDocsVector;
-    }
-
     public String ctf() {
         for (PdfLink pdfLink : entitiesDao.get(PdfLink.class, Restrictions.eq("indexed", true))) {
             ctf(pdfLink.getId());
