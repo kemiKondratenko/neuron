@@ -38,7 +38,7 @@
 <script>
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
             width = 1500 - margin.left - margin.right,
-            height = 20000 - margin.top - margin.bottom;
+            height = 2000 - margin.top - margin.bottom;
 
     /*
      * value accessor - returns the value to encode for a given data object.
@@ -81,7 +81,7 @@
        var y_max = d3.max(data, yValue);
         // don't want dots overlapping axis, so add in buffer to data domain
         xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
-        yScale.domain([0, y_max+(y_max/2)]);
+        yScale.domain([0, y_max+(y_max*0.2)]);
 
         // x-axis
         svg.append("g")
