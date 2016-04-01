@@ -89,5 +89,12 @@ public class MainController {
         return builderService.getDots();
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "formNormalizedUdc", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String formNormilizedUdc(){
+        return builderService.formNormalizedUdc();
+    }
+
 
 }

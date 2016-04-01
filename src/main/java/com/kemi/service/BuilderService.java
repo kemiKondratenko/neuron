@@ -9,6 +9,7 @@ import com.kemi.storage.crawler.WebCrawler;
 import com.kemi.tfidf.DocumentParser;
 import com.kemi.tfidf.TfIdf;
 import com.kemi.udc.UdcFinder;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class BuilderService {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Collection<UdcEntity> find() {
         List<UdcEntity> udcEntities = Lists.newArrayList();
-        for (UdcEntity udcEntity : entitiesDao.get(UdcEntity.class)) {
+        for (UdcEntity udcEntity : entitiesDao.get(UdcEntity.class, Restrictions.eq("normalization", 1))) {
             udcEntities.add(new UdcEntity(udcEntity));
         }
         return udcEntities;
@@ -88,5 +89,10 @@ public class BuilderService {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public List<JsonDots> getDots() {
         return tfIdf.getDots();
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String formNormalizedUdc() {
+        return udcFinder.formNormalizedUdc(1);
     }
 }

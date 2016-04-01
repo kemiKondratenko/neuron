@@ -20,6 +20,9 @@ public class UdcEntity {
     @Column(name = "udc")
     private String udc;
 
+    @Column(name = "normalization")
+    private Integer normalization;
+
     @OneToMany(mappedBy = "udcEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<LinkToUdc> linkToUdcs;
 
@@ -30,6 +33,11 @@ public class UdcEntity {
         this.udc = udc;
     }
 
+    public UdcEntity(String udc, Integer normalization) {
+        this.udc = udc;
+        this.normalization = normalization;
+    }
+
     public UdcEntity(UdcEntity udcEntity) {
         this.id = udcEntity.id;
         this.udc = udcEntity.udc;
@@ -37,6 +45,7 @@ public class UdcEntity {
         for (LinkToUdc linkToUdc : udcEntity.getLinkToUdcs()) {
             this.linkToUdcs.add(new LinkToUdc(linkToUdc));
         }
+        this.normalization = udcEntity.getNormalization();
     }
 
     public int getId() {
@@ -61,5 +70,13 @@ public class UdcEntity {
 
     public void setLinkToUdcs(Set<LinkToUdc> linkToUdcs) {
         this.linkToUdcs = linkToUdcs;
+    }
+
+    public Integer getNormalization() {
+        return normalization;
+    }
+
+    public void setNormalization(Integer normalization) {
+        this.normalization = normalization;
     }
 }

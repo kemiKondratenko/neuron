@@ -35,4 +35,21 @@ public class UdcDao {
         }
         return forUrl.get(0);
     }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public UdcEntity create(String href, Integer normalization) {
+        List<UdcEntity> forUrl = entitiesDao.get(UdcEntity.class, Restrictions.eq("udc", href), Restrictions.eq("normalization", normalization));
+        forUrl.remove(null);
+        Integer i = 0;
+        if(CollectionUtils.isEmpty(forUrl)) {
+            UdcEntity pdfLink = new UdcEntity(href, normalization);
+            i = entitiesDao.save(pdfLink);
+            return entitiesDao.get(UdcEntity.class, i);
+        }
+        return forUrl.get(0);
+    }
+
+    public List<UdcEntity> getAll() {
+        return entitiesDao.get(UdcEntity.class);
+    }
 }

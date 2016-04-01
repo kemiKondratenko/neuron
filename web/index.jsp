@@ -45,6 +45,7 @@
             $("#index").click(function(){index();});
             $("#ctf").click(function(){ctf();});
             $("#cidf").click(function(){cidf();});
+            $("#formNormalizedUdc").click(function(){formNormalizedUdc();});
 
             window.setInterval(function(){
                 find();
@@ -126,6 +127,16 @@
                         console.log(data)
                     });
         };
+        formNormalizedUdc = function () {
+            $.get("/formNormalizedUdc")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#formNormalizedUdc").html(syntaxHighlight(data));
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                    });
+        };
         function syntaxHighlight(json) {
             if (typeof json != 'string') {
                 json = JSON.stringify(json, undefined, 2);
@@ -155,6 +166,7 @@
 <p><input type ="button" id = "index" value="Index found texts"/></p>
 <p><input type ="button" id = "ctf" value="Term frequency"/></p>
 <p><input type ="button" id = "cidf" value="Inverse document frequency"/></p>
+<p><input type ="button" id = "formNormalizedUdc" value="Normalized Udc to 1 char"/></p>
 <pre><code>
     <div id="count"></div>
     <div id="udcCount"></div>
