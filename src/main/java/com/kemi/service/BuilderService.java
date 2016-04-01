@@ -98,4 +98,9 @@ public class BuilderService {
     public String formNormalizedUdc() {
         return udcNormalizer.formNormalizedUdc(1);
     }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String linkWordsToNormalizedUdc() {
+        return udcNormalizer.linkWordsToNormalizedUdc(1);
+    }
 }

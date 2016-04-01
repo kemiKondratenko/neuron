@@ -23,6 +23,9 @@ public class UdcEntity {
     @Column(name = "normalization")
     private Integer normalization;
 
+    @Column(name = "indexed")
+    private Boolean indexed;
+
     @OneToMany(mappedBy = "udcEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<LinkToUdc> linkToUdcs;
 
@@ -31,11 +34,13 @@ public class UdcEntity {
 
     public UdcEntity(String udc) {
         this.udc = udc;
+        this.indexed = false;
     }
 
     public UdcEntity(String udc, Integer normalization) {
         this.udc = udc;
         this.normalization = normalization;
+        this.indexed = false;
     }
 
     public UdcEntity(UdcEntity udcEntity) {
@@ -78,5 +83,13 @@ public class UdcEntity {
 
     public void setNormalization(Integer normalization) {
         this.normalization = normalization;
+    }
+
+    public Boolean getIndexed() {
+        return indexed;
+    }
+
+    public void setIndexed(Boolean indexed) {
+        this.indexed = indexed;
     }
 }

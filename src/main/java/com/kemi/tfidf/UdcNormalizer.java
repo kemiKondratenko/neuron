@@ -2,13 +2,19 @@ package com.kemi.tfidf;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.kemi.database.EntitiesDao;
 import com.kemi.database.LinkToUdcDao;
 import com.kemi.database.UdcDao;
+import com.kemi.database.WordDao;
 import com.kemi.entities.LinkToUdc;
 import com.kemi.entities.UdcEntity;
+import com.kemi.entities.mongo.TextWordMongoEntity;
+import com.kemi.mongo.MongoBase;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,9 +25,17 @@ import java.util.Set;
 public class UdcNormalizer {
 
     @Autowired
+    private EntitiesDao entitiesDao;
+    @Autowired
     private UdcDao udcDao;
     @Autowired
     private LinkToUdcDao linkToUdcDao;
+
+
+    @Autowired
+    private MongoBase mongoBase;
+    @Autowired
+    private WordDao wordDao;
 
     public String formNormalizedUdc(int chars) {
         Map<String, Set<UdcEntity>> normalizedUdcToIds = getNormalizedMap(chars);
@@ -46,5 +60,22 @@ public class UdcNormalizer {
             normalizedUdcToIds.get(normalizedUdc).add(udcEntity);
         }
         return normalizedUdcToIds;
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String linkWordsToNormalizedUdc(int normalization) {
+        for (UdcEntity udcEntity : entitiesDao.get(
+                UdcEntity.class,
+                Restrictions.eq("indexed", false),
+                Restrictions.eq("normalization", normalization))) {
+            for (LinkToUdc linkToUdc : udcEntity.getLinkToUdcs()) {
+                for (TextWordMongoEntity textWordMongoEntity : mongoBase.getPdfLinkTerms(linkToUdc.getPdfLink().getId())) {
+                    mongoBase.create(udcEntity, textWordMongoEntity.getWordEntity());
+                }
+            }
+            udcEntity.setIndexed(true);
+            entitiesDao.save(udcEntity);
+        }
+        return "";
     }
 }

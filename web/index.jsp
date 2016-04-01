@@ -46,6 +46,7 @@
             $("#ctf").click(function(){ctf();});
             $("#cidf").click(function(){cidf();});
             $("#formNormalizedUdc").click(function(){formNormalizedUdc();});
+            $("#linkWordsToNormalizedUdc").click(function(){linkWordsToNormalizedUdc();});
 
             window.setInterval(function(){
                 find();
@@ -137,6 +138,16 @@
                         console.log(data)
                     });
         };
+        linkWordsToNormalizedUdc = function () {
+            $.get("/linkWordsToNormalizedUdc")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#linkWordsToNormalizedUdc").html(syntaxHighlight(data));
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                    });
+        };
         function syntaxHighlight(json) {
             if (typeof json != 'string') {
                 json = JSON.stringify(json, undefined, 2);
@@ -167,6 +178,7 @@
 <p><input type ="button" id = "ctf" value="Term frequency"/></p>
 <p><input type ="button" id = "cidf" value="Inverse document frequency"/></p>
 <p><input type ="button" id = "formNormalizedUdc" value="Normalized Udc to 1 char"/></p>
+<p><input type ="button" id = "linkWordsToNormalizedUdc" value="Link words to normalized udc"/></p>
 <pre><code>
     <div id="count"></div>
     <div id="udcCount"></div>

@@ -96,5 +96,12 @@ public class MainController {
         return builderService.formNormalizedUdc();
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "linkWordsToNormalizedUdc", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String linkWordsToNormalizedUdc(){
+        return builderService.linkWordsToNormalizedUdc();
+    }
+
 
 }
