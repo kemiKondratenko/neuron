@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
 import com.kemi.entities.JsonDots;
 import com.kemi.entities.PdfLink;
+import com.kemi.entities.UdcEntity;
+import com.kemi.entities.mongo.NormalizedUdcMongoEnity;
 import com.kemi.entities.mongo.TextWordMongoEntity;
 import com.kemi.entities.mongo.WordMongoEntity;
 import com.kemi.mongo.MongoBase;
@@ -55,14 +57,28 @@ public class TfIdf {
     public List<JsonDots> getDots() {
         List<JsonDots> dots = Lists.newArrayList();
         for (WordMongoEntity wordMongoEntity : mongoBase.get(WordMongoEntity.class)) {
-            double tfBuffer = 0;
-            double count = 0;
-            for (TextWordMongoEntity textWordMongoEntity : mongoBase.getPdfLinkTerms(wordMongoEntity.getId())) {
-                tfBuffer += textWordMongoEntity.getTf();
-                count++;
+            for (NormalizedUdcMongoEnity textWordMongoEntity : mongoBase.getNormalizedUdcTerms(wordMongoEntity.getId())) {
+                dots.add(new JsonDots(wordMongoEntity.getIdf(), textWordMongoEntity.getTf(), wordMongoEntity.getWord()));
             }
-            dots.add(new JsonDots(wordMongoEntity.getIdf(), tfBuffer/count, wordMongoEntity.getWord()));
         }
         return dots;
+    }
+
+    public String ctfUdc(Integer normalization) {
+        for (UdcEntity pdfLink : entitiesDao.get(UdcEntity.class, Restrictions.eq("normalization", normalization)
+        , Restrictions.eq("indexed", Boolean.TRUE))) {
+            ctfUdcCounter(pdfLink.getId());
+        }
+        return "";
+    }
+
+    private void ctfUdcCounter(int id) {
+        int docTerms = mongoBase.getUdcTermsAmount(id);
+        if(docTerms > 0) {
+            for (NormalizedUdcMongoEnity normalizedUdcMongoEnity : mongoBase.getNormalizedUdcTerms(id)) {
+                normalizedUdcMongoEnity.setTf(Double.valueOf(normalizedUdcMongoEnity.getCount()) / Double.valueOf(docTerms));
+                mongoBase.save(normalizedUdcMongoEnity);
+            }
+        }
     }
 }

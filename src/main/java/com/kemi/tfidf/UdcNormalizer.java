@@ -54,7 +54,7 @@ public class UdcNormalizer {
         Map<String, Set<UdcEntity>> normalizedUdcToIds = Maps.newHashMap();
         for (UdcEntity udcEntity : udcDao.getAll()) {
             String normalizedUdc = udcEntity.getUdc().substring(0, chars);
-            if (!normalizedUdcToIds.containsKey(normalizedUdc)){
+            if (!normalizedUdcToIds.containsKey(normalizedUdc)) {
                 normalizedUdcToIds.put(normalizedUdc, Sets.<UdcEntity>newHashSet());
             }
             normalizedUdcToIds.get(normalizedUdc).add(udcEntity);
@@ -66,8 +66,10 @@ public class UdcNormalizer {
     public String linkWordsToNormalizedUdc(int normalization) {
         for (UdcEntity udcEntity : entitiesDao.get(
                 UdcEntity.class,
-                Restrictions.eq("indexed", false),
-                Restrictions.eq("normalization", normalization))) {
+                Restrictions.eq("normalization", Integer.valueOf(normalization)),
+                Restrictions.isNull("indexed")
+        )
+                ) {
             for (LinkToUdc linkToUdc : udcEntity.getLinkToUdcs()) {
                 for (TextWordMongoEntity textWordMongoEntity : mongoBase.getPdfLinkTerms(linkToUdc.getPdfLink().getId())) {
                     mongoBase.create(udcEntity, textWordMongoEntity.getWordEntity());

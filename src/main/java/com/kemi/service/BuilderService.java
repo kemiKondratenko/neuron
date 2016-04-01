@@ -25,6 +25,8 @@ import java.util.List;
 @Service
 public class BuilderService {
 
+    public static final Integer NORMALIZATION = 1;
+
     @Autowired
     private EntitiesDao entitiesDao;
 
@@ -81,7 +83,7 @@ public class BuilderService {
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String ctf() {
-        return tfIdf.ctf();
+        return tfIdf.ctfUdc(NORMALIZATION);
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
@@ -96,11 +98,11 @@ public class BuilderService {
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String formNormalizedUdc() {
-        return udcNormalizer.formNormalizedUdc(1);
+        return udcNormalizer.formNormalizedUdc(NORMALIZATION);
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String linkWordsToNormalizedUdc() {
-        return udcNormalizer.linkWordsToNormalizedUdc(1);
+        return udcNormalizer.linkWordsToNormalizedUdc(NORMALIZATION);
     }
 }

@@ -20,6 +20,9 @@ public class NormalizedUdcMongoEnity {
 
     private Double tf;
 
+    public NormalizedUdcMongoEnity() {
+    }
+
     public NormalizedUdcMongoEnity(int normalizedUdc, String wordEntity) {
         this.normalizedUdc = normalizedUdc;
         this.wordEntity = wordEntity;

@@ -120,4 +120,32 @@ public class MongoBase {
     public List<TextWordMongoEntity> getPdfLinkTerms() {
         return mongoOperations.findAll(TextWordMongoEntity.class);
     }
+
+    public int getUdcTermsAmount(int id) {
+        TypedAggregation<NormalizedUdcMongoEnity> agg = Aggregation.newAggregation(
+                NormalizedUdcMongoEnity.class,
+                Aggregation.match(Criteria.where("normalizedUdc").is(id)),
+                Aggregation.group().sum("count").as("count")
+        );
+        AggregationResults<NormalizedUdcMongoEnity> result = mongoOperations.aggregate(agg, NormalizedUdcMongoEnity.class);
+        List<NormalizedUdcMongoEnity> stateStatsList = result.getMappedResults();
+        if(stateStatsList.isEmpty()){
+            return 0;
+        }
+        return stateStatsList.get(0).getCount();
+    }
+
+    public List<NormalizedUdcMongoEnity> getNormalizedUdcTerms(int id) {
+        Query findQuery = new Query();
+        Criteria mainCriteria = Criteria.where("normalizedUdc").is(id);
+        findQuery.addCriteria(mainCriteria);
+        return mongoOperations.find(findQuery, NormalizedUdcMongoEnity.class);
+    }
+
+    public List<NormalizedUdcMongoEnity> getNormalizedUdcTerms(String id) {
+        Query findQuery = new Query();
+        Criteria mainCriteria = Criteria.where("wordEntity").is(id);
+        findQuery.addCriteria(mainCriteria);
+        return mongoOperations.find(findQuery, NormalizedUdcMongoEnity.class);
+    }
 }
