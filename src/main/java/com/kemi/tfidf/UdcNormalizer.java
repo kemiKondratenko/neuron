@@ -24,7 +24,7 @@ public class UdcNormalizer {
     private LinkToUdcDao linkToUdcDao;
 
     public String formNormalizedUdc(int chars) {
-        Map<String, Set<UdcEntity>> normalizedUdcToIds = getNormilizedMap(chars);
+        Map<String, Set<UdcEntity>> normalizedUdcToIds = getNormalizedMap(chars);
         for (String normalizedUdc : normalizedUdcToIds.keySet()) {
             UdcEntity udcEntity = udcDao.create(normalizedUdc, chars);
             for (UdcEntity notNormalizedUdc : normalizedUdcToIds.get(normalizedUdc)) {
@@ -36,15 +36,15 @@ public class UdcNormalizer {
         return "";
     }
 
-    private Map<String, Set<UdcEntity>> getNormilizedMap(int chars) {
-        Map<String, Set<UdcEntity>> normilizedUdcToIds = Maps.newHashMap();
+    private Map<String, Set<UdcEntity>> getNormalizedMap(int chars) {
+        Map<String, Set<UdcEntity>> normalizedUdcToIds = Maps.newHashMap();
         for (UdcEntity udcEntity : udcDao.getAll()) {
-            String normilizedUdc = udcEntity.getUdc().substring(0, chars);
-            if (!normilizedUdcToIds.containsKey(normilizedUdc)){
-                normilizedUdcToIds.put(normilizedUdc, Sets.<UdcEntity>newHashSet());
+            String normalizedUdc = udcEntity.getUdc().substring(0, chars);
+            if (!normalizedUdcToIds.containsKey(normalizedUdc)){
+                normalizedUdcToIds.put(normalizedUdc, Sets.<UdcEntity>newHashSet());
             }
-            normilizedUdcToIds.get(normilizedUdc).add(udcEntity);
+            normalizedUdcToIds.get(normalizedUdc).add(udcEntity);
         }
-        return normilizedUdcToIds;
+        return normalizedUdcToIds;
     }
 }

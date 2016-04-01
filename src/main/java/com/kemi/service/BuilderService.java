@@ -8,6 +8,7 @@ import com.kemi.entities.UdcEntity;
 import com.kemi.storage.crawler.WebCrawler;
 import com.kemi.tfidf.DocumentParser;
 import com.kemi.tfidf.TfIdf;
+import com.kemi.tfidf.UdcNormalizer;
 import com.kemi.udc.UdcFinder;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class BuilderService {
     private WebCrawler webCrawler;
     @Autowired
     private UdcFinder udcFinder;
+    @Autowired
+    private UdcNormalizer udcNormalizer;
 
     @Autowired
     private DocumentParser documentParser;
@@ -93,6 +96,6 @@ public class BuilderService {
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String formNormalizedUdc() {
-        return udcFinder.formNormalizedUdc(1);
+        return udcNormalizer.formNormalizedUdc(1);
     }
 }
