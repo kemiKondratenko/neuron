@@ -15,7 +15,7 @@ public class JsonDots {
         this.x_axis = x_axis;
         this.y_axis = y_axis;
         this.radius = 5;
-        this.color = "black";
+        this.color = "red";
         this.word = word;
     }
 

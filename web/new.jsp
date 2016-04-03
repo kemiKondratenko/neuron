@@ -60,7 +60,7 @@
             yAxis = d3.svg.axis().scale(yScale).orient("left");
 
     // setup fill color
-    var cValue = function(d) { return d.Manufacturer;},
+    var cValue = function(d) { return d.color;},
             color = d3.scale.category10();
 
     // add the graph canvas to the body of the webpage
@@ -115,7 +115,7 @@
                 .attr("r", 1.5)
                 .attr("cx", xMap)
                 .attr("cy", yMap)
-                .style("fill", function(d) { return color(cValue(d));})
+                .style("fill", function(d) { return cValue(d);})
                 .on("mouseover", function(d) {
                     tooltip.transition()
                             .duration(200)
