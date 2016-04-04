@@ -60,8 +60,7 @@
             yAxis = d3.svg.axis().scale(yScale).orient("left");
 
     // setup fill color
-    var cValue = function(d) { return d.color;},
-            color = d3.scale.category10();
+    var cValue = function(d) { return d.color;};
 
     // add the graph canvas to the body of the webpage
     var svg = d3.select("body").append("svg")

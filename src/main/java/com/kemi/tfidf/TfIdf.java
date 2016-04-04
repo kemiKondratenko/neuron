@@ -27,6 +27,9 @@ public class TfIdf {
     @Autowired
     private MongoBase mongoBase;
 
+    @Autowired
+    private MostUsefulFinder findMostUseful;
+
     public String ctf() {
         for (PdfLink pdfLink : entitiesDao.get(PdfLink.class, Restrictions.eq("indexed", true))) {
             ctf(pdfLink.getId());
@@ -66,6 +69,7 @@ public class TfIdf {
             if(count > 0)
                 dots.add(new JsonDots(wordMongoEntity.getIdf(), buff/count, wordMongoEntity.getWord()));
         }
+        findMostUseful.findMostUseful(dots);
         return dots;
     }
 
