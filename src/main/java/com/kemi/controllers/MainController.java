@@ -108,7 +108,7 @@ public class MainController {
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "cluster", produces = "application/json;charset=utf-8")
     public @ResponseBody
-    Map<Integer, Double> cluster(){
+    Map<String, Double> cluster(){
         return builderService.cluster();
     }
 

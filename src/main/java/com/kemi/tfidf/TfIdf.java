@@ -50,7 +50,7 @@ public class TfIdf {
         return "";
     }
 
-    private void ctf(int id) {
+    public void ctf(int id) {
         int docTerms = mongoBase.getPdfLinkTermsAmount(id);
         if(docTerms > 0) {
             for (TextWordMongoEntity textWordMongoEntity : mongoBase.getPdfLinkTerms(id)) {

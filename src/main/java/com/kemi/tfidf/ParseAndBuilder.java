@@ -64,8 +64,8 @@ public class ParseAndBuilder {
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public List<WordMongoEntity> parseAndBuildWords(String text) {
-        List<WordMongoEntity> link = Lists.newArrayList();
+    public List<WordMongoEntity> parseAndBuildAndReturnWords(PdfLink link, String text) {
+        List<WordMongoEntity> wordMongoEntities = Lists.newArrayList();
         if (text != null) {
             StringBuilder stringBuilder = new StringBuilder("");
             for (int i = 0; i < text.length(); i++) {
@@ -90,13 +90,15 @@ public class ParseAndBuilder {
                             ) {
                         if (stringBuilder.length() > 2) {
                             one++;
-                            link.add(wordDao.create(stringBuilder.toString()));
+                            WordMongoEntity wordE = wordDao.create(stringBuilder.toString());
+                            mongoBase.create(link, wordE);
+                            wordMongoEntities.add(wordE);
                         }
                         stringBuilder = new StringBuilder("");
                     }
                 }
             }
         }
-        return link;
+        return wordMongoEntities;
     }
 }

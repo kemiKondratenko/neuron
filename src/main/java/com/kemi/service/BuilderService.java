@@ -111,7 +111,7 @@ public class BuilderService {
     }
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public Map<Integer, Double> cluster() {
+    public Map<String, Double> cluster() {
         return cluster.cluster();
     }
 }

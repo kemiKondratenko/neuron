@@ -19,17 +19,23 @@ public class LinksDao {
     private EntitiesDao entitiesDao;
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void create(String href) {
+    public PdfLink create(String href) {
         List<PdfLink> forUrl = entitiesDao.get(PdfLink.class, Restrictions.eq("pdfLink", href));
         forUrl.remove(null);
         if(CollectionUtils.isEmpty(forUrl)) {
             PdfLink pdfLink = new PdfLink(href);
             entitiesDao.save(pdfLink);
+            return pdfLink;
         }
+        return forUrl.get(0);
     }
 
     public void indexed(PdfLink link) {
         link.setIndexed(true);
         entitiesDao.update(link);
+    }
+
+    public PdfLink get(int i) {
+        return entitiesDao.get(PdfLink.class, Restrictions.eq("id", i)).get(0);
     }
 }

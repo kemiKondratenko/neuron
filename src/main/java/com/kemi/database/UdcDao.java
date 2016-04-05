@@ -52,4 +52,8 @@ public class UdcDao {
     public List<UdcEntity> getAll() {
         return entitiesDao.get(UdcEntity.class);
     }
+
+    public UdcEntity get(Integer integer) {
+        return entitiesDao.get(UdcEntity.class, Restrictions.eq("id", integer)).get(0);
+    }
 }
