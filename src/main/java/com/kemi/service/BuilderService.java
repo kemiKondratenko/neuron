@@ -1,6 +1,7 @@
 package com.kemi.service;
 
 import com.google.common.collect.Lists;
+import com.kemi.clastering.Cluster;
 import com.kemi.database.EntitiesDao;
 import com.kemi.entities.JsonDots;
 import com.kemi.entities.PdfLink;
@@ -18,6 +19,7 @@ import javax.transaction.Transactional;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Eugene on 16.03.2016.
@@ -41,6 +43,8 @@ public class BuilderService {
     private DocumentParser documentParser;
     @Autowired
     private TfIdf tfIdf;
+    @Autowired
+    private Cluster cluster;
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void get() {
@@ -104,5 +108,10 @@ public class BuilderService {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String linkWordsToNormalizedUdc() {
         return udcNormalizer.linkWordsToNormalizedUdc(NORMALIZATION);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public Map<Integer, Double> cluster() {
+        return cluster.cluster();
     }
 }

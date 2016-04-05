@@ -101,9 +101,12 @@ public class TfIdf {
 
     private Boolean isUnique(NormalizedUdcMongoEnity normalizedUdcMongoEnity){
         List<NormalizedUdcMongoEnity> normalizedUdcMongoEnities = mongoBase.getNormalizedUdcTerms(normalizedUdcMongoEnity.getWordEntity());
-        normalizedUdcMongoEnities.remove(normalizedUdcMongoEnity);
-        Boolean res = Boolean.FALSE;
-        
-        return mongoBase.getNormalizedUdcTermCount(normalizedUdcMongoEnity.getWordEntity()).equals(Integer.valueOf(1));
+        Double maxCommon = normalizedUdcMongoEnity.getCommon();
+        for (NormalizedUdcMongoEnity udcMongoEnity : normalizedUdcMongoEnities) {
+            if(udcMongoEnity.getCommon().compareTo(maxCommon) < 0){
+                maxCommon = udcMongoEnity.getCommon();
+            }
+        }
+        return normalizedUdcMongoEnity.getCommon().equals(maxCommon) && normalizedUdcMongoEnities.size() < 3;
     }
 }

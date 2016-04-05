@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Eugene on 16.03.2016.
@@ -101,6 +102,14 @@ public class MainController {
     public @ResponseBody
     String linkWordsToNormalizedUdc(){
         return builderService.linkWordsToNormalizedUdc();
+    }
+
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "cluster", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    Map<Integer, Double> cluster(){
+        return builderService.cluster();
     }
 
 

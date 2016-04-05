@@ -1,5 +1,6 @@
 package com.kemi.tfidf;
 
+import com.google.common.collect.Lists;
 import com.kemi.database.LinksDao;
 import com.kemi.database.WordDao;
 import com.kemi.entities.PdfLink;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * Created by Eugene on 30.03.2016.
@@ -59,5 +61,42 @@ public class ParseAndBuilder {
             }
             linksDao.indexed(link);
         }
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public List<WordMongoEntity> parseAndBuildWords(String text) {
+        List<WordMongoEntity> link = Lists.newArrayList();
+        if (text != null) {
+            StringBuilder stringBuilder = new StringBuilder("");
+            for (int i = 0; i < text.length(); i++) {
+                char c = Character.toLowerCase(text.charAt(i));
+                if (
+                        (c >= 'а' && c <= 'я')
+                                || c == 'є'
+                                || c == 'ї'
+                                || c == 'і'
+                                || c == 'ґ'
+                        ) {
+                    stringBuilder.append(c);
+                } else {
+                    if (
+                            (
+                                    c != '-'
+                                            && c != '\''
+                                            && c != '`'
+                                            && c != '’'
+                            )
+                                    && StringUtils.isNotBlank(stringBuilder.toString())
+                            ) {
+                        if (stringBuilder.length() > 2) {
+                            one++;
+                            link.add(wordDao.create(stringBuilder.toString()));
+                        }
+                        stringBuilder = new StringBuilder("");
+                    }
+                }
+            }
+        }
+        return link;
     }
 }
