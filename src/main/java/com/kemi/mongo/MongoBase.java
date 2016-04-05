@@ -148,4 +148,25 @@ public class MongoBase {
         findQuery.addCriteria(mainCriteria);
         return mongoOperations.find(findQuery, NormalizedUdcMongoEnity.class);
     }
+
+    public Integer getNormalizedUdcTermCount(String wordEntity) {
+        TypedAggregation<NormalizedUdcMongoEnity> agg = Aggregation.newAggregation(
+                NormalizedUdcMongoEnity.class,
+                Aggregation.match(Criteria.where("wordEntity").is(wordEntity)),
+                Aggregation.group().sum("count").as("count")
+        );
+        AggregationResults<NormalizedUdcMongoEnity> result = mongoOperations.aggregate(agg, NormalizedUdcMongoEnity.class);
+        List<NormalizedUdcMongoEnity> stateStatsList = result.getMappedResults();
+        if(stateStatsList.isEmpty()){
+            return 0;
+        }
+        return stateStatsList.get(0).getCount();
+    }
+
+    public List<NormalizedUdcMongoEnity> getNormalizedAndUniqueUdcTerms(String id) {
+        Query findQuery = new Query();
+        findQuery.addCriteria(Criteria.where("wordEntity").is(id));
+        findQuery.addCriteria(Criteria.where("unique").is(Boolean.TRUE));
+        return mongoOperations.find(findQuery, NormalizedUdcMongoEnity.class);
+    }
 }

@@ -2,6 +2,7 @@ package com.kemi.tfidf;
 
 import com.google.common.collect.Lists;
 import com.kemi.database.EntitiesDao;
+import com.kemi.database.WordDao;
 import com.kemi.entities.JsonDots;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.UdcEntity;
@@ -26,6 +27,8 @@ public class TfIdf {
 
     @Autowired
     private MongoBase mongoBase;
+    @Autowired
+    private WordDao wordDao;
 
     @Autowired
     private MostUsefulFinder findMostUseful;
@@ -62,21 +65,20 @@ public class TfIdf {
         for (WordMongoEntity wordMongoEntity : mongoBase.get(WordMongoEntity.class)) {
             Double buff = 0.;
             Double count = 0.;
-            for (NormalizedUdcMongoEnity textWordMongoEntity : mongoBase.getNormalizedUdcTerms(wordMongoEntity.getId())) {
-                buff += textWordMongoEntity.getTf();
-                count++;
+            for (NormalizedUdcMongoEnity textWordMongoEntity : mongoBase.getNormalizedAndUniqueUdcTerms(wordMongoEntity.getId())) {
+                dots.add(new JsonDots(Double.valueOf(textWordMongoEntity.getRandomId()), textWordMongoEntity.getCommon(), wordMongoEntity.getWord()));
             }
-            if(count > 0)
-                dots.add(new JsonDots(wordMongoEntity.getIdf(), buff/count, wordMongoEntity.getWord()));
         }
         findMostUseful.findMostUseful(dots);
         return dots;
     }
 
+    private static Integer ID = 0;
+
     public String ctfUdc(Integer normalization) {
         for (UdcEntity pdfLink : entitiesDao.get(UdcEntity.class, Restrictions.eq("normalization", normalization)
         , Restrictions.eq("indexed", Boolean.TRUE))) {
-            ctfUdcCounter(pdfLink.getId());
+            commonCounter(pdfLink.getId());
         }
         return "";
     }
@@ -89,5 +91,21 @@ public class TfIdf {
                 mongoBase.save(normalizedUdcMongoEnity);
             }
         }
+    }
+
+    private void commonCounter(int id) {
+        for (NormalizedUdcMongoEnity normalizedUdcMongoEnity : mongoBase.getNormalizedUdcTerms(id)) {
+            normalizedUdcMongoEnity.setUnique(isUnique(normalizedUdcMongoEnity));
+            mongoBase.save(normalizedUdcMongoEnity);
+        }
+    }
+
+
+    private Boolean isUnique(NormalizedUdcMongoEnity normalizedUdcMongoEnity){
+        List<NormalizedUdcMongoEnity> normalizedUdcMongoEnities = mongoBase.getNormalizedUdcTerms(normalizedUdcMongoEnity.getWordEntity());
+        normalizedUdcMongoEnities.remove(normalizedUdcMongoEnity);
+        Boolean res = Boolean.FALSE;
+        
+        return mongoBase.getNormalizedUdcTermCount(normalizedUdcMongoEnity.getWordEntity()).equals(Integer.valueOf(1));
     }
 }

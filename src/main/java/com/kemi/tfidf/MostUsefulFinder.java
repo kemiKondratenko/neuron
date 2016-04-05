@@ -22,46 +22,52 @@ public class MostUsefulFinder {
         Double minY = getMinY(jsonDotses);
         Double maxX = getMaxX(jsonDotses);
         Double maxY = getMaxY(jsonDotses);
+        Double currentDensity;
+        Double density = density(minX, minY, maxY, maxX, Double.valueOf(jsonDotses.size()));
         Integer count;
         Boolean changed;
         do {
             changed = false;
             Double minYLocal = getMinY(jsonDotses, minY);
             count = countY(jsonDotses, minY);
-            if (density(minX, minYLocal, maxY, maxX, Double.valueOf(jsonDotses.size() - count),
-                    minX, minY, maxY, maxX, Double.valueOf(jsonDotses.size()))) {
+            currentDensity = density(minX, minYLocal, maxY, maxX, Double.valueOf(jsonDotses.size() - count));
+            if (currentDensity >= density - D) {
                 removeY(jsonDotses, minY);
                 minY = minYLocal;
+                density = currentDensity;
                 changed = true;
             }
 
             Double maxYLocal = getMaxY(jsonDotses, maxY);
             count = countY(jsonDotses, maxY);
-            if (density(minX, minY, maxYLocal, maxX, Double.valueOf(jsonDotses.size() - count),
-                    minX, minY, maxY, maxX, Double.valueOf(jsonDotses.size()))) {
+            currentDensity = density(minX, minY, maxYLocal, maxX, Double.valueOf(jsonDotses.size() - count));
+            if (currentDensity >= density - D) {
                 removeY(jsonDotses, maxY);
                 maxY = maxYLocal;
+                density = currentDensity;
                 changed = true;
             }
 
             Double maxXLocal = getMaxX(jsonDotses, maxX);
             count = countX(jsonDotses, maxX);
-            if (density(minX, minY, maxY, maxXLocal, Double.valueOf(jsonDotses.size() - count),
-                    minX, minY, maxY, maxX, Double.valueOf(jsonDotses.size()))) {
+            currentDensity = density(minX, minY, maxY, maxXLocal, Double.valueOf(jsonDotses.size() - count));
+            if (currentDensity >= density - D) {
                 removeX(jsonDotses, maxX);
                 maxX = maxXLocal;
+                density = currentDensity;
                 changed = true;
             }
 
             Double minXLocal = getMinX(jsonDotses, minX);
             count = countX(jsonDotses, minX);
-            if (density(minXLocal, minY, maxY, maxX, Double.valueOf(jsonDotses.size() - count),
-                    minX, minY, maxY, maxX, Double.valueOf(jsonDotses.size()))) {
+            currentDensity = density(minXLocal, minY, maxY, maxX, Double.valueOf(jsonDotses.size() - count));
+            if (currentDensity >= density - D) {
                 removeX(jsonDotses, minX);
                 minX = minXLocal;
+                density = currentDensity;
                 changed = true;
             }
-        } while (changed);
+        } while (changed && !jsonDotses.isEmpty() && !jsonDotses.isEmpty());
         color(dots, jsonDotses);
     }
 
@@ -77,19 +83,6 @@ public class MostUsefulFinder {
         Double area = dY * dX;
         Double result = size / area;
         return result;
-    }
-
-    private boolean density(Double minX, Double minY, Double maxY, Double maxX, Double size,
-                            Double minX2, Double minY2, Double maxY2, Double maxX2, Double size2) {
-        Double dY = (maxY - minY);
-        Double dX = (maxX - minX);
-        Double area = dY * dX;
-        Double dY2 = (maxY2 - minY2);
-        Double dX2 = (maxX2 - minX2);
-        Double area2 = dY2 * dX2;
-        Double dSize = size2 / size;
-        Double dArea = area2 / area;
-        return dArea > dSize;
     }
 
     private void removeX(Set<JsonDots> jsonDotses, Double min) {

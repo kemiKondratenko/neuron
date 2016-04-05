@@ -37,4 +37,11 @@ public class WordDao {
         }
         return forUrl;
     }
+
+    public WordMongoEntity get(String wordEntity) {
+        Query findQuery = new Query();
+        Criteria mainCriteria = Criteria.where("id").is(wordEntity);
+        findQuery.addCriteria(mainCriteria);
+        return mongoOperations.findOne(findQuery, WordMongoEntity.class);
+    }
 }
