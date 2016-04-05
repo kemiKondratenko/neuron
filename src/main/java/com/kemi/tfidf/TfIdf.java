@@ -62,14 +62,12 @@ public class TfIdf {
 
     public List<JsonDots> getDots() {
         List<JsonDots> dots = Lists.newArrayList();
-        for (WordMongoEntity wordMongoEntity : mongoBase.get(WordMongoEntity.class)) {
-            Double buff = 0.;
-            Double count = 0.;
-            for (NormalizedUdcMongoEnity textWordMongoEntity : mongoBase.getNormalizedAndUniqueUdcTerms(wordMongoEntity.getId())) {
-                dots.add(new JsonDots(Double.valueOf(textWordMongoEntity.getRandomId()), textWordMongoEntity.getCommon(), wordMongoEntity.getWord()));
+        for (NormalizedUdcMongoEnity textWordMongoEntity : mongoBase.getNormalizedAndUniqueUdcTerms()) {
+                dots.add(new JsonDots(
+                        Double.valueOf(textWordMongoEntity.getRandomId()),
+                        textWordMongoEntity.getCommon(),
+                        mongoBase.getWord(textWordMongoEntity.getWordEntity()).getWord()));
             }
-        }
-        findMostUseful.findMostUseful(dots);
         return dots;
     }
 

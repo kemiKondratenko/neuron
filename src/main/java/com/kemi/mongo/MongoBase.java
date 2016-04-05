@@ -117,6 +117,13 @@ public class MongoBase {
         return stateStatsList.get(0).getCount();
     }
 
+    public WordMongoEntity getWord(String wordEntity) {
+        Query findQuery = new Query();
+        Criteria mainCriteria = Criteria.where("id").is(wordEntity);
+        findQuery.addCriteria(mainCriteria);
+        return mongoOperations.findOne(findQuery, WordMongoEntity.class);
+    }
+
     public List<TextWordMongoEntity> getPdfLinkTerms() {
         return mongoOperations.findAll(TextWordMongoEntity.class);
     }
@@ -166,6 +173,12 @@ public class MongoBase {
     public List<NormalizedUdcMongoEnity> getNormalizedAndUniqueUdcTerms(String id) {
         Query findQuery = new Query();
         findQuery.addCriteria(Criteria.where("wordEntity").is(id));
+        findQuery.addCriteria(Criteria.where("unique").is(Boolean.TRUE));
+        return mongoOperations.find(findQuery, NormalizedUdcMongoEnity.class);
+    }
+
+    public List<NormalizedUdcMongoEnity> getNormalizedAndUniqueUdcTerms() {
+        Query findQuery = new Query();
         findQuery.addCriteria(Criteria.where("unique").is(Boolean.TRUE));
         return mongoOperations.find(findQuery, NormalizedUdcMongoEnity.class);
     }
