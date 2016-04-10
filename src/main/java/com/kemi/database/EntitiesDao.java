@@ -61,4 +61,8 @@ public class EntitiesDao {
     public <T> T update(T object) {
         return (T) getSession().merge(object);
     }
+
+    public <T> void delete(T link) {
+        getSession().delete(link);
+    }
 }

@@ -42,14 +42,55 @@ public class WebCrawlerImpl implements WebCrawler {
                 ||link.startsWith("http://www.ekmair.ukma.edu.ua")
                 || link.startsWith("http://ekmair.ukma.edu.ua")
                 || link.startsWith("https://ekmair.ukma.edu.ua")
-                || link.startsWith("ekmair.ukma.edu.ua"))
+                || link.startsWith("ekmair.ukma.edu.ua")
+                || link.startsWith("http://kpi.ua/")
+                || link.startsWith("http://kpi.ua")
+                || link.startsWith("kpi.ua")
+                || link.startsWith("http://bulletin.kpi.ua/")
+                || link.startsWith("http://bulletin.kpi.ua")
+                || link.startsWith("bulletin.kpi.ua")
+                || link.startsWith("http://old.bulletin.kpi.ua/")
+                || link.startsWith("http://old.bulletin.kpi.ua")
+                || link.startsWith("old.bulletin.kpi.ua")
+                || link.startsWith("http://chemengine.kpi.ua/")
+                || link.startsWith("http://chemengine.kpi.ua")
+                || link.startsWith("chemengine.kpi.ua")
+                || link.startsWith("http://historypages.kpi.ua")
+                || link.startsWith("http://history-pages.kpi.ua")
+                || link.startsWith("http://visnyk-psp.kpi.ua")
+                || link.startsWith("http://journal-phipsyped.kpi.ua")
+                || link.startsWith("http://novyn.kpi.ua")
+                || link.startsWith("http://mining.kpi.ua")
+                || link.startsWith("http://ev.fmm.kpi.ua")
+                || link.startsWith("http://economy.kpi.ua")
+                || link.startsWith("http://ape.fmm.kpi.ua")
+                || link.startsWith("http://probl-economy.kpi.ua")
+                || link.startsWith("http://sb-keip.kpi.ua")
+                || link.startsWith("http://mgsys.kpi.ua")
+                || link.startsWith("http://ismc.kpi.ua")
+                || link.startsWith("http://journal.mmi.kpi.ua")
+                || link.startsWith("http://visnyk-mmi.kpi.ua")
+                || link.startsWith("http://visnykpb.kpi.ua")
+                || link.startsWith("http://it-visnyk.kpi.ua")
+                || link.startsWith("http://ttdruk.vpi.kpi.ua")
+                || link.startsWith("http://druk.kpi.ua")
+                || link.startsWith("http://ae.fl.kpi.ua")
+                || link.startsWith("http://visnyk.fl.kpi.ua")
+                || link.startsWith("http://rht-journal.kpi.ua")
+                || link.startsWith("http://energy.kpi.ua")
+                || link.startsWith("http://its.iszzi.kpi.ua")
+                || link.startsWith("http://journal.iasa.kpi.ua")
+                || link.startsWith("http://infotelesc.kpi.ua")
+                || link.startsWith("http://asac.kpi.ua")
+                || link.startsWith("http://pnzzi.kpi.ua")
+                || link.startsWith("http://radap.kpi.ua")
+                || link.startsWith("http://elc.kpi.ua"))
         && !unavailableLinks.contains(link);
     }
 
     private void getLinksOnPage(String url) {
         if (visitedLinks.contains(url))
             return;
-        format(url);
         if (visitedLinks.contains(url))
             return;
         if (!isAllowed(url))
@@ -91,6 +132,12 @@ public class WebCrawlerImpl implements WebCrawler {
                     pdfLinks.add(href);
                     visitedLinks.add(href);
                     linksDao.create(href);
+                }  else
+                if (href.contains("download")) {
+                    System.out.println("New pdf is "+href);
+                    pdfLinks.add(href);
+                    visitedLinks.add(href);
+                    linksDao.create(href);
                 } else
                     references.add(href);
             }
@@ -102,18 +149,14 @@ public class WebCrawlerImpl implements WebCrawler {
     }
 
     private String format(String href, String url) {
-        int dot = url.lastIndexOf('.');
+        if(href.startsWith("#") || href.startsWith("mailto"))
+            return "";
+        int dot = url.indexOf('.');
         int slh = url.indexOf( '/', dot);
         String place = url.substring(0, slh > 0 ? slh : url.length());
-        if (!url.startsWith("http"))
+        if (!href.startsWith("http"))
             href = place + href;
         return href;
-    }
-
-    private String format(String url) {
-        if (!url.startsWith("http"))
-            url = "http://nz.ukma.edu.ua" + url;
-        return url;
     }
 
     @Override

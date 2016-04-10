@@ -98,6 +98,13 @@ public class MainController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "ctfUdc", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String ctfUdc(){
+        return builderService.ctfUdc();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "linkWordsToNormalizedUdc", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String linkWordsToNormalizedUdc(){

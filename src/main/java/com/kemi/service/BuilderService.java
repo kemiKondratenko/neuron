@@ -49,7 +49,7 @@ public class BuilderService {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void get() {
         try {
-            webCrawler.start(new URL("http://nz.ukma.edu.ua/"), 6000);
+            webCrawler.start(new URL("http://bulletin.kpi.ua/"), 6000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,6 +87,11 @@ public class BuilderService {
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String ctf() {
+        return tfIdf.ctf();
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String ctfUdc() {
         return tfIdf.ctfUdc(NORMALIZATION);
     }
 

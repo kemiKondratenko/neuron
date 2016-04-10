@@ -47,6 +47,7 @@ public class UdcFinder {
         List<LinkToUdc> linkToUdcs = linkToUdcDao.find(link);
         linkToUdcs.remove(null);
         if (CollectionUtils.isEmpty(linkToUdcs)) {
+            boolean created = false;
             String text = loader.loadText(link.getPdfLink());
             if (text != null) {
                 String udcText = findUdcText(text);
@@ -55,9 +56,12 @@ public class UdcFinder {
                     for (String udc : udcs) {
                         UdcEntity udcEntity = udcDao.create(udc);
                         createLink(link, udcEntity);
+                        created = true;
                     }
                 }
             }
+            if(!created)
+                entitiesDao.delete(link);
         }
     }
 

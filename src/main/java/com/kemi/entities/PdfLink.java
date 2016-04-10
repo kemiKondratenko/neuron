@@ -35,6 +35,7 @@ public class PdfLink {
 
     public PdfLink(String pdfLink) {
         this.pdfLink = pdfLink;
+        this.indexed = false;
     }
 
     public PdfLink(PdfLink pdfLink) {

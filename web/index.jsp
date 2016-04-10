@@ -46,12 +46,13 @@
             $("#ctf").click(function(){ctf();});
             $("#cidf").click(function(){cidf();});
             $("#formNormalizedUdc").click(function(){formNormalizedUdc();});
+            $("#ctfUdc").click(function(){ctfUdc();});
             $("#linkWordsToNormalizedUdc").click(function(){linkWordsToNormalizedUdc();});
             $("#cluster").click(function(){cluster();});
 
             window.setInterval(function(){
                 find();
-            }, 15000);
+            }, 1000);
         });
         start = function () {
             $.get("/new")
@@ -149,6 +150,16 @@
                         console.log(data)
                     });
         };
+        ctfUdc = function () {
+            $.get("/ctfUdc")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#ctfUdc").html(syntaxHighlight(data));
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                    });
+        };
         cluster = function () {
             $.get("/cluster")
                     .done(function (data) {
@@ -190,6 +201,7 @@
 <p><input type ="button" id = "cidf" value="Inverse document frequency"/></p>
 <p><input type ="button" id = "formNormalizedUdc" value="Normalized Udc to 1 char"/></p>
 <p><input type ="button" id = "linkWordsToNormalizedUdc" value="Link words to normalized udc"/></p>
+<p><input type ="button" id = "ctfUdc" value="Terms frequency for udc"/></p>
 <p><input type ="button" id = "cluster" value="cluster"/></p>
 <pre><code>
     <div id="clusterRes"></div>
