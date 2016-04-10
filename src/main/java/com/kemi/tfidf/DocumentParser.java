@@ -26,6 +26,7 @@ public class DocumentParser {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void parseFiles() {
         List<PdfLink> links = entitiesDao.get(PdfLink.class, Restrictions.eq("indexed", false));
+        links.addAll(entitiesDao.get(PdfLink.class, Restrictions.isNull("indexed")));
         buildWordEntities(links);
     }
 

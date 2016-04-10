@@ -52,7 +52,7 @@
 
             window.setInterval(function(){
                 find();
-            }, 1000);
+            }, 100000);
         });
         start = function () {
             $.get("/new")

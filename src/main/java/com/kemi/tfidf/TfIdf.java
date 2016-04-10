@@ -44,8 +44,10 @@ public class TfIdf {
         Double wordsCount = Double.valueOf(mongoBase.getWordsCount());
         for (WordMongoEntity wordMongoEntity : mongoBase.get(WordMongoEntity.class)) {
             Double wordCount = Double.valueOf(mongoBase.getWordsCount(wordMongoEntity.getId()));
-            wordMongoEntity.setIdf(1 + Math.log(wordsCount / wordCount));
-            mongoBase.save(wordMongoEntity);
+            if(wordCount.compareTo(0.) != 0) {
+                wordMongoEntity.setIdf(1 + Math.log(wordsCount / wordCount));
+                mongoBase.save(wordMongoEntity);
+            }
         }
         return "";
     }
@@ -74,9 +76,11 @@ public class TfIdf {
     private static Integer ID = 0;
 
     public String ctfUdc(Integer normalization) {
-        for (UdcEntity pdfLink : entitiesDao.get(UdcEntity.class, Restrictions.eq("normalization", normalization)
+        for (UdcEntity udcEntity : entitiesDao.get(UdcEntity.class, Restrictions.eq("normalization", normalization)
         , Restrictions.eq("indexed", Boolean.TRUE))) {
-            commonCounter(pdfLink.getId());
+            ctfUdcCounter(udcEntity.getId());
+            commonCounter(udcEntity);
+            commonCounter(udcEntity.getId());
         }
         return "";
     }
@@ -94,6 +98,13 @@ public class TfIdf {
     private void commonCounter(int id) {
         for (NormalizedUdcMongoEnity normalizedUdcMongoEnity : mongoBase.getNormalizedUdcTerms(id)) {
             normalizedUdcMongoEnity.setUnique(isUnique(normalizedUdcMongoEnity));
+            mongoBase.save(normalizedUdcMongoEnity);
+        }
+    }
+
+    private void commonCounter(UdcEntity udcEntity) {
+        for (NormalizedUdcMongoEnity normalizedUdcMongoEnity : mongoBase.getNormalizedUdcTerms(udcEntity.getId())) {
+            normalizedUdcMongoEnity.setCommon(normalizedUdcMongoEnity.getTf() * mongoBase.getWord(normalizedUdcMongoEnity.getWordEntity()).getIdf());
             mongoBase.save(normalizedUdcMongoEnity);
         }
     }
