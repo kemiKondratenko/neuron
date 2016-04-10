@@ -119,4 +119,9 @@ public class BuilderService {
     public Map<String, Double> cluster() {
         return cluster.cluster();
     }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String countPossibility() {
+        return udcNormalizer.countPossibility(NORMALIZATION);
+    }
 }

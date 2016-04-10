@@ -23,6 +23,9 @@ public class UdcEntity {
     @Column(name = "normalization")
     private Integer normalization;
 
+    @Column(name = "possibilityOfUdc")
+    private Double possibilityOfUdc;
+
     @Column(name = "indexed")
     private Boolean indexed;
 
@@ -35,12 +38,14 @@ public class UdcEntity {
     public UdcEntity(String udc) {
         this.udc = udc;
         this.indexed = false;
+        this.possibilityOfUdc = 0.;
     }
 
     public UdcEntity(String udc, Integer normalization) {
         this.udc = udc;
         this.normalization = normalization;
         this.indexed = false;
+        this.possibilityOfUdc = 0.;
     }
 
     public UdcEntity(UdcEntity udcEntity) {
@@ -51,6 +56,7 @@ public class UdcEntity {
             this.linkToUdcs.add(new LinkToUdc(linkToUdc));
         }
         this.normalization = udcEntity.getNormalization();
+        this.possibilityOfUdc = 0.;
     }
 
     public int getId() {
@@ -91,5 +97,13 @@ public class UdcEntity {
 
     public void setIndexed(Boolean indexed) {
         this.indexed = indexed;
+    }
+
+    public Double getPossibilityOfUdc() {
+        return possibilityOfUdc;
+    }
+
+    public void setPossibilityOfUdc(Double possibilityOfUdc) {
+        this.possibilityOfUdc = possibilityOfUdc;
     }
 }

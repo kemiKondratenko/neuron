@@ -80,4 +80,25 @@ public class UdcNormalizer {
         }
         return "";
     }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String countPossibility(int normalization) {
+        Double n = Double.valueOf(entitiesDao.executeCount(
+                " SELECT count(*) FROM neuron.pdf_link as pdf where " +
+                " exists (select * from link_to_udc as ln where " +
+                " ln.pdfLink_id = pdf.id " +
+                " AND exists " +
+                " (select * from udc as ud where ln.udcEntity_id = ud.id AND normalization = "+normalization+" ));").longValue());
+        for (UdcEntity udcEntity : entitiesDao.get(
+                UdcEntity.class,
+                Restrictions.eq("normalization", Integer.valueOf(normalization)),
+                Restrictions.eq("indexed", true)
+        )
+                ) {
+            Double nC = Double.valueOf(udcEntity.getLinkToUdcs().size());
+            udcEntity.setPossibilityOfUdc(nC/n);
+            entitiesDao.save(udcEntity);
+        }
+        return "";
+    }
 }

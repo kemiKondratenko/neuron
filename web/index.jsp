@@ -49,6 +49,7 @@
             $("#ctfUdc").click(function(){ctfUdc();});
             $("#linkWordsToNormalizedUdc").click(function(){linkWordsToNormalizedUdc();});
             $("#cluster").click(function(){cluster();});
+            $("#countPossibility").click(function(){countPossibility();});
 
             window.setInterval(function(){
                 find();
@@ -170,6 +171,16 @@
                         console.log(data)
                     });
         };
+        countPossibility = function () {
+            $.get("/countPossibility")
+                    .done(function (data) {
+                        console.log(data);
+                        $("#countPossibility").html(syntaxHighlight(data));
+                    })
+                    .fail(function (data) {
+                        console.log(data)
+                    });
+        };
         function syntaxHighlight(json) {
             if (typeof json != 'string') {
                 json = JSON.stringify(json, undefined, 2);
@@ -202,6 +213,7 @@
 <p><input type ="button" id = "formNormalizedUdc" value="Normalized Udc to 1 char"/></p>
 <p><input type ="button" id = "linkWordsToNormalizedUdc" value="Link words to normalized udc"/></p>
 <p><input type ="button" id = "ctfUdc" value="Terms frequency for udc"/></p>
+<p><input type ="button" id = "countPossibility" value="count possibility for normalized udc"/></p>
 <p><input type ="button" id = "cluster" value="cluster"/></p>
 <pre><code>
     <div id="clusterRes"></div>

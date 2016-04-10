@@ -65,4 +65,10 @@ public class EntitiesDao {
     public <T> void delete(T link) {
         getSession().delete(link);
     }
+
+    public <T> Number  executeCount(String s) {
+        return ((Number) sessionFactory.getCurrentSession()
+                .createSQLQuery(s)
+                .uniqueResult()).longValue();
+    }
 }

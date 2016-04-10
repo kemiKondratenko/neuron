@@ -120,4 +120,12 @@ public class MainController {
     }
 
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "countPossibility", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String countPossibility(){
+        return builderService.countPossibility();
+    }
+
+
 }
