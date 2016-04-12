@@ -176,7 +176,7 @@ public class MongoBase {
     public List<NormalizedUdcMongoEnity> getNormalizedAndUniqueUdcTerms(String id) {
         Query findQuery = new Query();
         findQuery.addCriteria(Criteria.where("wordEntity").is(id));
-        findQuery.addCriteria(Criteria.where("unique").is(Boolean.TRUE));
+        //findQuery.addCriteria(Criteria.where("unique").is(Boolean.TRUE));
         return mongoOperations.find(findQuery, NormalizedUdcMongoEnity.class);
     }
 

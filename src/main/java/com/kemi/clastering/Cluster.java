@@ -65,7 +65,20 @@ public class Cluster {
         final Integer all = links.size();
         for (PdfLink pdfLink : links) {
             Map<String, Double> result = getByNaiveBaise(pdfLink);
+            Map<String, Double> result2 = getResultKNN(pdfLink);
+            Map<String, Double> result3 = getSimple(pdfLink);
             String max = getMax(result);
+            String max2 = getMax(result2);
+            String max3 = getMax(result3);
+            if(max3.equals(max)){
+                max = max3;
+            } else if(max3.equals(max2)){
+                max = max2;
+            } else if(max2.equals(max)){
+                max = max2;
+            } else {
+                max = max3;
+            }
             if(correct(max, pdfLink) && StringUtils.isNotBlank(max)){
                 correct++;
             } else {
@@ -164,15 +177,15 @@ public class Cluster {
                 if (!resultI.containsKey(normalizedUdcMongoEnity.getNormalizedUdc())) {
                     resultI.put(normalizedUdcMongoEnity.getNormalizedUdc(), Double.valueOf(0));
                 }
-                Double aDouble = resultI.get(normalizedUdcMongoEnity.getNormalizedUdc()) + Math.log(normalizedUdcMongoEnity.getTf());
+                Double aDouble = resultI.get(normalizedUdcMongoEnity.getNormalizedUdc()) + /*Math.log(*/normalizedUdcMongoEnity.getTf()/*)*/;
                 resultI.put(normalizedUdcMongoEnity.getNormalizedUdc(), aDouble);
             }
         }
         Map<String, Double> result = Maps.newHashMap();
         for (Integer integer : resultI.keySet()) {
             UdcEntity udcEntity = udcDao.get(integer);
-            Double pC = Math.log(udcEntity.getPossibilityOfUdc());
-            result.put(udcDao.get(integer).getUdc(), pC + resultI.get(integer));
+            //Double pC = Math.log(udcEntity.getPossibilityOfUdc());
+            result.put(udcDao.get(integer).getUdc(), /*pC + */resultI.get(integer));
         }
         return result;
     }

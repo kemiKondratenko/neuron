@@ -11,7 +11,6 @@ import com.kemi.tfidf.DocumentParser;
 import com.kemi.tfidf.TfIdf;
 import com.kemi.tfidf.UdcNormalizer;
 import com.kemi.udc.UdcFinder;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +48,7 @@ public class BuilderService {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void get() {
         try {
-            webCrawler.start(new URL("http://bulletin.kpi.ua/"), 6000);
+            webCrawler.start(new URL("http://kpi.ua/publication/"), 6000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,9 +57,9 @@ public class BuilderService {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Collection<UdcEntity> find() {
         List<UdcEntity> udcEntities = Lists.newArrayList();
-        for (UdcEntity udcEntity : entitiesDao.get(UdcEntity.class, Restrictions.eq("normalization", 1))) {
+        /*for (UdcEntity udcEntity : entitiesDao.get(UdcEntity.class, Restrictions.eq("normalization", 1))) {
             udcEntities.add(new UdcEntity(udcEntity));
-        }
+        }*/
         return udcEntities;
     }
 

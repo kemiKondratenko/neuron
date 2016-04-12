@@ -24,9 +24,15 @@ public class LinkToUdcDao {
         return entitiesDao.get(LinkToUdc.class, Restrictions.eq("pdfLink.id", link.getId()));
     }
 
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void create(PdfLink link, UdcEntity udcEntity) {
+        if(exist(link, udcEntity))
+            return;
         LinkToUdc linkToUdc = new LinkToUdc(link, udcEntity);
         entitiesDao.save(linkToUdc);
+    }
+
+    private boolean exist(PdfLink link, UdcEntity udcEntity) {
+        return !entitiesDao.get(LinkToUdc.class, Restrictions.eq("pdfLink.id", link.getId()),
+                Restrictions.eq("udcEntity.id", udcEntity.getId())).isEmpty();
     }
 }

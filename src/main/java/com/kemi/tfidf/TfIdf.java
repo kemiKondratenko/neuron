@@ -80,7 +80,7 @@ public class TfIdf {
         , Restrictions.eq("indexed", Boolean.TRUE))) {
             ctfUdcCounter(udcEntity.getId());
             commonCounter(udcEntity);
-            commonCounter(udcEntity.getId());
+            //commonCounter(udcEntity.getId());
         }
         return "";
     }

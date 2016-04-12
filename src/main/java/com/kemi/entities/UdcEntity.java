@@ -106,4 +106,25 @@ public class UdcEntity {
     public void setPossibilityOfUdc(Double possibilityOfUdc) {
         this.possibilityOfUdc = possibilityOfUdc;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UdcEntity)) return false;
+
+        UdcEntity udcEntity = (UdcEntity) o;
+
+        if (id != udcEntity.id) return false;
+        if (!udc.equals(udcEntity.udc)) return false;
+        return normalization == udcEntity.normalization || (normalization != null && normalization.equals(udcEntity.normalization));
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + udc.hashCode();
+        result = normalization == null ? 1 : 31 * result + normalization.hashCode();
+        return result;
+    }
 }
