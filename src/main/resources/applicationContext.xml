@@ -81,5 +81,8 @@
         <constructor-arg name="mongoDbFactory" ref="mongoDBFactory"/>
     </bean>
 
-    <!-- MONGO -->
+    <bean id="indexDirectory" class="java.lang.String">
+        <constructor-arg value="D:\work\index\lucene"/>
+    </bean>
+
 </beans>

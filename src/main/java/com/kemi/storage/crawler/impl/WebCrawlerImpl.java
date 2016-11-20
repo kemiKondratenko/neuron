@@ -102,8 +102,8 @@ public class WebCrawlerImpl implements WebCrawler {
             visitedLinks.add(url);
         else
             unavailableLinks.add(url);
-        for (String link : references)
-            getLinksOnPage(link);
+        /*for (String link : references)
+            getLinksOnPage(link);*/
     }
 
     private boolean parsePage(String url, List<String> references) {

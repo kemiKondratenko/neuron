@@ -65,18 +65,18 @@ public class Cluster {
         final Integer all = links.size();
         for (PdfLink pdfLink : links) {
             Map<String, Double> result = getByNaiveBaise(pdfLink);
-            Map<String, Double> result2 = getResultKNN(pdfLink);
+            //Map<String, Double> result2 = getResultKNN(pdfLink);
             Map<String, Double> result3 = getSimple(pdfLink);
             String max = getMax(result);
-            String max2 = getMax(result2);
+           // String max2 = getMax(result2);
             String max3 = getMax(result3);
-            if(max3.equals(max)){
+            if(!max3.equals(max)){
                 max = max3;
-            } else if(max3.equals(max2)){
+            }/* else if(max3.equals(max2)){
                 max = max2;
             } else if(max2.equals(max)){
                 max = max2;
-            } else {
+            }*/ else {
                 max = max3;
             }
             if(correct(max, pdfLink) && StringUtils.isNotBlank(max)){
@@ -158,7 +158,7 @@ public class Cluster {
                 if (!resultI.containsKey(normalizedUdcMongoEnity.getNormalizedUdc())) {
                     resultI.put(normalizedUdcMongoEnity.getNormalizedUdc(), Double.valueOf(0));
                 }
-                Double aDouble = resultI.get(normalizedUdcMongoEnity.getNormalizedUdc()) + normalizedUdcMongoEnity.getCommon();
+                Double aDouble = resultI.get(normalizedUdcMongoEnity.getNormalizedUdc()) + textWordMongoEntity.getCount()*normalizedUdcMongoEnity.getCommon();
                 resultI.put(normalizedUdcMongoEnity.getNormalizedUdc(), aDouble);
             }
         }
@@ -177,7 +177,7 @@ public class Cluster {
                 if (!resultI.containsKey(normalizedUdcMongoEnity.getNormalizedUdc())) {
                     resultI.put(normalizedUdcMongoEnity.getNormalizedUdc(), Double.valueOf(0));
                 }
-                Double aDouble = resultI.get(normalizedUdcMongoEnity.getNormalizedUdc()) + /*Math.log(*/normalizedUdcMongoEnity.getTf()/*)*/;
+                Double aDouble = resultI.get(normalizedUdcMongoEnity.getNormalizedUdc()) + /*Math.log(*/textWordMongoEntity.getCount()*normalizedUdcMongoEnity.getTf()/*)*/;
                 resultI.put(normalizedUdcMongoEnity.getNormalizedUdc(), aDouble);
             }
         }
