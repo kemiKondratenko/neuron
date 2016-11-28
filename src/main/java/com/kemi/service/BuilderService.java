@@ -6,15 +6,18 @@ import com.kemi.database.EntitiesDao;
 import com.kemi.entities.JsonDots;
 import com.kemi.entities.PdfLink;
 import com.kemi.entities.UdcEntity;
+import com.kemi.service.lucene.IndexService;
 import com.kemi.storage.crawler.WebCrawler;
 import com.kemi.tfidf.DocumentParser;
 import com.kemi.tfidf.TfIdf;
 import com.kemi.tfidf.UdcNormalizer;
 import com.kemi.udc.UdcFinder;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
@@ -44,6 +47,8 @@ public class BuilderService {
     private TfIdf tfIdf;
     @Autowired
     private Cluster cluster;
+    @Autowired
+    private IndexService indexService;
 
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void get() {
@@ -122,5 +127,24 @@ public class BuilderService {
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public String countPossibility() {
         return udcNormalizer.countPossibility(NORMALIZATION);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String runLuceneIndex() throws IOException {
+        indexService.init();
+        int i = 0;
+        for (PdfLink pdfLink:
+                entitiesDao.get(
+                        PdfLink.class,
+                        Restrictions.or(Restrictions.isNull("indexedInLucene"),
+                                Restrictions.eq("indexedInLucene", Boolean.FALSE)))) {
+            indexService.addDocument(pdfLink);
+            System.out.println("count "+i++);
+            if (i == 1000){
+                indexService.close();
+                break;
+            }
+        }
+        return null;
     }
 }

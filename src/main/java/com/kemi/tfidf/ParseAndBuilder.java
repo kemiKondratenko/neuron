@@ -33,22 +33,18 @@ public class ParseAndBuilder {
             for (int i = 0; i < text.length(); i++) {
                 char c = Character.toLowerCase(text.charAt(i));
                 if (
-                        (c >= 'а' && c <= 'я')
-                                || c == 'є'
-                                || c == 'ї'
-                                || c == 'і'
-                                || c == 'ґ'
+                        true
                         ) {
                     stringBuilder.append(c);
                 } else {
                     if (
-                            (
+                          /*  (
                                     c != '-'
                                             && c != '\''
                                             && c != '`'
                                             && c != '’'
                             )
-                                    && StringUtils.isNotBlank(stringBuilder.toString())
+                                    && */StringUtils.isNotBlank(stringBuilder.toString())
                             ) {
                         if (stringBuilder.length() > 2) {
                             one++;
@@ -71,22 +67,22 @@ public class ParseAndBuilder {
             for (int i = 0; i < text.length(); i++) {
                 char c = Character.toLowerCase(text.charAt(i));
                 if (
-                        (c >= 'а' && c <= 'я')
+                        /*(c >= 'а' && c <= 'я')
                                 || c == 'є'
                                 || c == 'ї'
                                 || c == 'і'
-                                || c == 'ґ'
+                                || c == 'ґ'*/true
                         ) {
                     stringBuilder.append(c);
                 } else {
                     if (
-                            (
+                           /* (
                                     c != '-'
                                             && c != '\''
                                             && c != '`'
                                             && c != '’'
                             )
-                                    && StringUtils.isNotBlank(stringBuilder.toString())
+                                    &&*/ StringUtils.isNotBlank(stringBuilder.toString())
                             ) {
                         if (stringBuilder.length() > 2) {
                             one++;

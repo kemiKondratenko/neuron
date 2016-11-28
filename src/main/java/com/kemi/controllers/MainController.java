@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +126,13 @@ public class MainController {
     public @ResponseBody
     String countPossibility(){
         return builderService.countPossibility();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "runLuceneIndex", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String runLuceneIndex() throws IOException {
+        return builderService.runLuceneIndex();
     }
 
 

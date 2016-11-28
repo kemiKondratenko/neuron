@@ -1,5 +1,7 @@
 package com.kemi.service.lucene.impl;
 
+import com.kemi.database.EntitiesDao;
+import com.kemi.entities.PdfLink;
 import com.kemi.service.text.load.Loader;
 import com.kemi.service.lucene.IndexService;
 import org.apache.lucene.analysis.ru.RussianAnalyzer;
@@ -10,13 +12,13 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 
@@ -31,29 +33,48 @@ public class IndexServiceImpl implements IndexService {
 
     @Autowired
     private Loader loader;
+    @Autowired
+    private EntitiesDao entitiesDao;
+
 
     @PostConstruct
     public void init() throws IOException{
-        //this directory will contain the indexes
         Directory indexDirectory =
                 FSDirectory.open(new File(indexDirectoryPath));
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig
                 (LuceneConstants.VERSION,
                         new RussianAnalyzer(LuceneConstants.VERSION));
-        //create the indexer
-        writer = new IndexWriter(indexDirectory, indexWriterConfig);
+        if (writer == null) {
+            writer = new IndexWriter(indexDirectory, indexWriterConfig);
+        }
     }
 
     @Override
-    public void addDocument(String name) throws IOException {
-        Document document = getDocument(name);
-        writer.addDocument(document);
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void addDocument(PdfLink pdfLink) throws IOException {
+        Document document = getDocument(pdfLink.getPdfLink());
+        if(document != null) {
+            writer.addDocument(document);
+        }
+        pdfLink.setIndexedInLucene(Boolean.TRUE);
+        entitiesDao.update(pdfLink);
     }
 
     private Document getDocument(String name) throws IOException{
+        String text = loader.loadText(name);
+        if (text == null){
+            return null;
+        }
         Document document = new Document();
-
-        Field contentField = new Field(name, loader.loadText(name), new FieldType());
+        FieldType fieldType = new FieldType();
+        fieldType.setIndexed(true);
+        FieldType fieldType2 = new FieldType();
+        fieldType2.setStored(true);
+        Field nameField = new Field(LuceneConstants.FILE_NAME,
+                name, fieldType2);
+        Field contentField = new Field(LuceneConstants.CONTENTS,
+                text, fieldType);
+        document.add(nameField);
         document.add(contentField);
 
         return document;
@@ -61,6 +82,9 @@ public class IndexServiceImpl implements IndexService {
 
     @PreDestroy
     public void close() throws IOException{
+        writer.prepareCommit();
+        writer.commit();
         writer.close();
+        writer = null;
     }
 }
