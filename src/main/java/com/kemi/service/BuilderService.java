@@ -140,8 +140,20 @@ public class BuilderService {
                                 Restrictions.eq("indexedInLucene", Boolean.FALSE)))) {
             indexService.addDocument(pdfLink);
             System.out.println("count "+i++);
-            if (i == 1000){
-                indexService.close();
+        }
+        indexService.close();
+        return null;
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public String runSolarIndex() throws IOException {
+        int i = 0;
+        for (PdfLink pdfLink:
+                entitiesDao.get(
+                        PdfLink.class)) {
+            indexService.addDocumentToSolr(pdfLink);
+            System.out.println("count "+i++);
+            if (i == 100){
                 break;
             }
         }

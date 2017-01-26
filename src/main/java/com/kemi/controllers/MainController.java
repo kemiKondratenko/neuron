@@ -135,5 +135,12 @@ public class MainController {
         return builderService.runLuceneIndex();
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "runSolarIndex", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String runSolarIndex() throws IOException {
+        return builderService.runSolarIndex();
+    }
+
 
 }

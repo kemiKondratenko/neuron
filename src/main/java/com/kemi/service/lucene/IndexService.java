@@ -13,4 +13,6 @@ public interface IndexService {
     void close() throws IOException;
 
     void init() throws IOException;
+
+    void addDocumentToSolr(PdfLink pdfLink);
 }

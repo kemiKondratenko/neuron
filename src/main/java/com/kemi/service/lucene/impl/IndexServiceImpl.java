@@ -2,8 +2,10 @@ package com.kemi.service.lucene.impl;
 
 import com.kemi.database.EntitiesDao;
 import com.kemi.entities.PdfLink;
-import com.kemi.service.text.load.Loader;
+import com.kemi.entities.solr.UdcDocument;
 import com.kemi.service.lucene.IndexService;
+import com.kemi.service.text.load.Loader;
+import com.kemi.solr.SolrDocumentRepository;
 import org.apache.lucene.analysis.ru.RussianAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -35,6 +37,8 @@ public class IndexServiceImpl implements IndexService {
     private Loader loader;
     @Autowired
     private EntitiesDao entitiesDao;
+    @Autowired
+    private SolrDocumentRepository solrDocumentRepository;
 
 
     @PostConstruct
@@ -51,10 +55,27 @@ public class IndexServiceImpl implements IndexService {
 
     @Override
     @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void addDocumentToSolr(PdfLink pdfLink) {
+        String text = loader.loadText(pdfLink.getPdfLink());
+        if (text == null){
+            return;
+        }
+        UdcDocument document = new UdcDocument();
+        document.setName(pdfLink.getPdfLink());
+        document.setText(text);
+        solrDocumentRepository.save(document);
+        pdfLink.setIndexedInSolr(Boolean.TRUE);
+        entitiesDao.update(pdfLink);
+    }
+
+    @Override
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public void addDocument(PdfLink pdfLink) throws IOException {
         Document document = getDocument(pdfLink.getPdfLink());
         if(document != null) {
             writer.addDocument(document);
+            writer.prepareCommit();
+            writer.commit();
         }
         pdfLink.setIndexedInLucene(Boolean.TRUE);
         entitiesDao.update(pdfLink);
@@ -66,16 +87,19 @@ public class IndexServiceImpl implements IndexService {
             return null;
         }
         Document document = new Document();
+
         FieldType fieldType = new FieldType();
         fieldType.setIndexed(true);
+        fieldType.setStored(true);
+        Field contentField = new Field(LuceneConstants.CONTENTS,
+                text, fieldType);
+        document.add(contentField);
+
         FieldType fieldType2 = new FieldType();
         fieldType2.setStored(true);
         Field nameField = new Field(LuceneConstants.FILE_NAME,
                 name, fieldType2);
-        Field contentField = new Field(LuceneConstants.CONTENTS,
-                text, fieldType);
         document.add(nameField);
-        document.add(contentField);
 
         return document;
     }

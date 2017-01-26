@@ -28,6 +28,9 @@ public class PdfLink {
     @Column(name = "indexedInLucene")
     private Boolean indexedInLucene;
 
+    @Column(name = "indexedInSolr")
+    private Boolean indexedInSolr;
+
     public PdfLink() {}
 
     public PdfLink(int id, String pdfLink) {
@@ -87,6 +90,14 @@ public class PdfLink {
         this.indexedInLucene = indexedInLucene;
     }
 
+
+    public void setIndexedInSolr(Boolean indexedInSolr) {
+        this.indexedInSolr = indexedInSolr;
+    }
+
+    public Boolean getIndexedInSolr() {
+        return indexedInSolr;
+    }
     @Override
     public String toString() {
         return "PdfLink{" +

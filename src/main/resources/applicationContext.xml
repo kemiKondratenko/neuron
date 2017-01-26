@@ -5,6 +5,7 @@
        xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:ehcache="http://www.springframework.org/schema/cache"
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:solr="http://www.springframework.org/schema/data/solr"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/mvc
@@ -16,7 +17,7 @@
        http://www.springframework.org/schema/cache
        http://www.springframework.org/schema/cache/spring-cache.xsd
        http://www.springframework.org/schema/data/mongo
-       http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+       http://www.springframework.org/schema/data/mongo/spring-mongo.xsd http://www.springframework.org/schema/data/solr http://www.springframework.org/schema/data/solr/spring-solr.xsd">
 
 
     <context:annotation-config/>
@@ -85,4 +86,16 @@
         <constructor-arg value="D:\work\index\lucene"/>
     </bean>
 
-</beans>
+
+        <solr:repositories
+                base-package="com.kemi.solr"/>
+
+    <solr:embedded-solr-server id="solrServer" solrHome="http://localhost:8983/solr/"/>
+
+    <bean id="solrTemplate" class="org.springframework.data.solr.core.SolrTemplate">
+        <constructor-arg ref="solrServer" />
+    </bean>
+
+
+
+    </beans>
