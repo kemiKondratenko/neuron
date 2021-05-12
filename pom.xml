@@ -12,7 +12,7 @@
         <java-version>1.6</java-version>
         <org.springframework-version>4.1.1.RELEASE</org.springframework-version>
         <org.springframework.roo-version>1.0.2.RELEASE</org.springframework.roo-version>
-        <org.solr-version>4.10.4</org.solr-version>
+        <org.solr-version>8.8.2</org.solr-version>
         <org.aspectj-version>1.6.11</org.aspectj-version>
         <org.slf4j-version>1.5.10</org.slf4j-version>
         <tiles.version>2.2.1</tiles.version>
